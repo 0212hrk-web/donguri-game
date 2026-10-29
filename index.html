@@ -1295,7 +1295,10 @@ function drawReflex() {
   ctx.font = "bold 17px sans-serif"; ctx.textAlign = "center"; ctx.fillStyle = "#5b3a17";
   ctx.fillText("反射神経イベント　あと " + (REFLEX_TOTAL - r.cleared) + "個", W / 2, 26);
   ctx.font = "bold 13px sans-serif"; ctx.fillStyle = "#8b46c7";
-  ctx.fillText("見逃しOK あと" + (r.maxMisses - r.misses) + "回　／　毒どんぐりはタップしちゃダメ", W / 2, 48);
+  ctx.fillText("毒どんぐりはタップしちゃダメ（消えるまで待って）", W / 2, 48);
+  const heartsTotal = r.maxMisses + 1, heartsLeft = heartsTotal - r.misses;
+  ctx.font = "bold 21px sans-serif"; ctx.fillStyle = "#e23b3b";
+  ctx.fillText("ライフ " + "♥".repeat(heartsLeft) + "♡".repeat(heartsTotal - heartsLeft), W / 2, 76);
   ctx.restore();
   // ready / start cues in the middle of the screen
   if (r.phase === "ready" || r.goT > 0) {
