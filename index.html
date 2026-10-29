@@ -203,7 +203,7 @@
       <button class="btn" id="gachaBtn" style="background:#7a4fd0;border-bottom-color:#4e2d8f;font-size:14px;padding:9px 20px;">ガチャ（30コイン）</button>
       <span id="gachaResult" style="font-weight:700;color:#c22e5f;"></span>
     </div>
-    <p style="font-size:12px;color:#7a5a33;line-height:1.55;max-width:640px;margin-bottom:8px;">コインはゲームオーバー時に「食べた数 ＋ スコア500点ごとに1」でもらえるよ。ガチャでは、まだ持っていないコスチュームがランダムで1つ当たります。</p>
+    <p style="font-size:12px;color:#7a5a33;line-height:1.55;max-width:640px;margin-bottom:8px;">コインはゲームオーバー時に「食べた数 ＋ スコア500点ごとに1」でもらえるよ。ガチャでは、まだ持っていないコスチュームがランダムで1つ当たります（スコア報酬のものはガチャからは出ません）。</p>
     <div id="dressMain">
       <div id="dressPreviewBox">
         <canvas id="dressCanvas" width="300" height="300"></canvas>
@@ -702,8 +702,8 @@ const GACHA_COST = 30;
 function pullGacha() {
   const res = document.getElementById("gachaResult");
   if (coins < GACHA_COST) { res.textContent = "コインが足りない…（あと " + (GACHA_COST - coins) + "）"; return; }
-  const pool = COSTUME_ITEMS.filter(function(it) { return !costumeUnlocked(it); });
-  if (!pool.length) { res.textContent = "ぜんぶコンプリートしてる！🎉"; return; }
+  const pool = COSTUME_ITEMS.filter(function(it) { return it.via.t !== "score" && !costumeUnlocked(it); });
+  if (!pool.length) { res.textContent = "ガチャで出るものは全部ゲット済み！🎉"; return; }
   coins -= GACHA_COST;
   const it = pool[Math.floor(Math.random() * pool.length)];
   gachaOwned[it.id] = true;
