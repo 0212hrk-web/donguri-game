@@ -83,17 +83,45 @@
   #zukan { position: absolute; inset: 0; z-index: 20; background: #fff7e8; padding: 16px; overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; align-items: center; }
   #zukan.hidden { display: none; }
   #zukan h3 { font-size: 22px; margin: 4px 0 10px; color: #5b3a17; }
-  #dressScreen { position: absolute; inset: 0; z-index: 15; background: #fff7e8; padding: 14px; overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; align-items: center; }
+  #dressScreen { position: absolute; inset: 0; z-index: 15; background: #fff7e8; padding: 14px; overflow: hidden; touch-action: none; display: flex; flex-direction: column; align-items: center; }
   #dressScreen.hidden { display: none; }
   #dressScreen h3 { font-size: 22px; margin: 4px 0 10px; color: #5b3a17; }
-  #dressMain { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 780px; }
+  #dressMain { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 780px; flex: 1; min-height: 0; }
   #dressPreviewBox { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-  #dressCanvas { width: min(300px, 78vw); height: auto; aspect-ratio: 1; background: linear-gradient(#aee3ff, #e8f9e8); border: 3px solid #8a5a2b; border-radius: 18px; }
-  #dressSide { flex: 1; min-width: min(320px, 92vw); max-width: 440px; display: flex; flex-direction: column; }
+  #dressCanvas { width: min(300px, 78vw, 46vh); height: auto; aspect-ratio: 1; background: linear-gradient(#aee3ff, #e8f9e8); border: 3px solid #8a5a2b; border-radius: 18px; }
+  #dressSide { flex: 1; min-width: min(320px, 92vw); max-width: 440px; display: flex; flex-direction: column; min-height: 0; }
   #dressTabs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
   .dtab { padding: 10px 16px; border-radius: 999px; border: 2px solid #8a5a2b; background: #fff; color: #5b3a17; font-weight: 700; font-size: 14px; cursor: pointer; font-family: inherit; }
   .dtab.on { background: #ffb347; }
-  #dressGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin-top: 10px; overflow-y: auto; max-height: 46vh; padding: 2px; }
+  #dressGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin-top: 10px; overflow-y: auto; flex: 1; min-height: 0; padding: 2px; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
+  #gachaScreen { position: absolute; inset: 0; z-index: 16; background: linear-gradient(180deg, #ffedd9, #ffd9ba); padding: 12px; display: flex; flex-direction: column; overflow: hidden; touch-action: none; }
+  #gachaScreen.hidden { display: none; }
+  .gacha-top { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 900px; margin: 0 auto; }
+  .gacha-coins { background: #fff; border: 3px solid #e8b34b; border-radius: 999px; padding: 7px 16px; font-weight: 900; color: #8a5a10; font-size: 16px; box-shadow: 0 2px 0 rgba(160,100,20,.25); }
+  .gacha-main { flex: 1; min-height: 0; display: flex; gap: 14px; width: 100%; max-width: 900px; margin: 8px auto 0; }
+  .gacha-left { flex: 1.05; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 0; }
+  .gacha-machine { width: min(290px, 86%); filter: drop-shadow(0 6px 10px rgba(150,80,20,.25)); }
+  .gacha-machine.shake { animation: gachaShake .55s ease; }
+  @keyframes gachaShake { 0%,100% { transform: rotate(0deg); } 20% { transform: rotate(-2.4deg); } 45% { transform: rotate(2.2deg); } 70% { transform: rotate(-1.2deg); } }
+  .gacha-logo { font-weight: 900; font-size: clamp(22px, 4.6vw, 34px); line-height: 1.18; color: #6b4423; text-shadow: 2px 2px 0 #fff, -2px 2px 0 #fff, 2px -2px 0 #fff, -2px -2px 0 #fff, 0 4px 0 #fff; margin-top: 2px; text-align: center; }
+  .gacha-right { flex: 1; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  .gacha-panel-y { background: #ffd94d; border-radius: 20px; padding: 14px; box-shadow: 0 4px 0 rgba(170,120,20,.35); }
+  .gacha-panel-b { background: #57a8e8; border-radius: 20px; padding: 14px; box-shadow: 0 4px 0 rgba(30,90,160,.35); flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .gacha-pull { width: 100%; background: #fff6e6; color: #5b3a17; font-size: clamp(20px, 3.6vw, 27px); font-weight: 900; border: 3px solid #e8b34b; border-bottom: 6px solid #d9a441; border-radius: 16px; padding: 14px 8px; cursor: pointer; font-family: inherit; }
+  .gacha-pull:active { transform: translateY(2px); }
+  .gacha-cost { text-align: center; font-weight: 700; color: #7a5410; margin-top: 8px; font-size: 13px; }
+  .gacha-result { text-align: center; font-weight: 900; color: #c22e5f; min-height: 22px; margin-top: 6px; font-size: 15px; }
+  .gacha-won { display: flex; flex-direction: column; align-items: center; gap: 2px; margin-top: 6px; background: rgba(255,255,255,.65); border-radius: 14px; padding: 8px; }
+  .gacha-won.hidden { display: none; }
+  .gacha-won img { height: 74px; max-width: 100%; object-fit: contain; }
+  .gacha-won b { color: #5b3a17; font-size: 16px; text-align: center; }
+  .gacha-list-btn { width: 100%; background: #fff6e6; color: #24507e; font-size: clamp(16px, 3vw, 21px); font-weight: 900; border: 3px solid #bcd9f5; border-bottom: 6px solid #9cc3ea; border-radius: 16px; padding: 12px 8px; cursor: pointer; font-family: inherit; }
+  .gacha-list { overflow-y: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; margin-top: 10px; display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 7px; min-height: 0; }
+  .gacha-list.hidden { display: none; }
+  .gacha-tile { background: #fff; border-radius: 12px; padding: 5px 3px; display: flex; flex-direction: column; align-items: center; gap: 1px; font-size: 10px; font-weight: 700; color: #24507e; text-align: center; }
+  .gacha-tile img { height: 40px; max-width: 100%; object-fit: contain; }
+  .gacha-tile.own { opacity: .55; }
+  @media (max-aspect-ratio: 1/1) { .gacha-main { flex-direction: column; } .gacha-machine { width: min(200px, 60%); } }
   .dtile { background: #fff; border: 2px solid #f0d9ae; border-radius: 14px; padding: 7px 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; font-family: inherit; }
   .dtile img { height: 52px; max-width: 100%; object-fit: contain; }
   .dtile.sel { border-color: #ff8fb2; background: #fff0f5; box-shadow: 0 0 0 2px #ff8fb2 inset; }
@@ -200,10 +228,9 @@
     <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;margin-bottom:6px;max-width:760px;">
       <span id="coinLabel" style="font-weight:700;color:#b07818;">🪙 コイン 0</span>
       <span id="lifeEatenLabel" style="font-weight:700;color:#7a5a33;">累計 0 体</span>
-      <button class="btn" id="gachaBtn" style="background:#7a4fd0;border-bottom-color:#4e2d8f;font-size:14px;padding:9px 20px;">ガチャ（30コイン）</button>
-      <span id="gachaResult" style="font-weight:700;color:#c22e5f;"></span>
+      <button class="btn" id="gachaOpenBtn" style="background:#7a4fd0;border-bottom-color:#4e2d8f;font-size:14px;padding:9px 20px;">🎰 ガチャ画面</button>
     </div>
-    <p style="font-size:12px;color:#7a5a33;line-height:1.55;max-width:640px;margin-bottom:8px;">コインはゲームオーバー時に「食べた数 ＋ スコア500点ごとに1」でもらえるよ。ガチャでは、まだ持っていないコスチュームがランダムで1つ当たります（スコア報酬のものはガチャからは出ません）。</p>
+    <p style="font-size:12px;color:#7a5a33;line-height:1.55;max-width:640px;margin-bottom:8px;">コインはゲームオーバー時に「食べた数 ＋ スコア500点ごとに1」でもらえるよ。ガチャは「ガチャ画面」ボタンから回せるよ（スコア報酬のものはガチャからは出ません）。</p>
     <div id="dressMain">
       <div id="dressPreviewBox">
         <canvas id="dressCanvas" width="300" height="300"></canvas>
@@ -215,6 +242,57 @@
       </div>
     </div>
     <button class="btn" id="dressClose" style="margin-top:14px;font-size:17px;padding:13px 38px;">決定</button>
+  </div>
+  <div id="gachaScreen" class="hidden">
+    <div class="gacha-top">
+      <button class="btn" id="gachaBack" style="background:#fff;color:#5b3a17;border-bottom-color:#c9a86a;font-size:14px;padding:9px 18px;">← もどる</button>
+      <span class="gacha-coins" id="gachaCoins">🪙 コイン 0</span>
+    </div>
+    <div class="gacha-main">
+      <div class="gacha-left">
+        <svg class="gacha-machine" id="gachaMachine" viewBox="0 0 300 360" aria-hidden="true">
+          <ellipse cx="50" cy="152" rx="19" ry="34" fill="#bfe3f7" transform="rotate(-18 50 152)"/>
+          <ellipse cx="250" cy="152" rx="19" ry="34" fill="#bfe3f7" transform="rotate(18 250 152)"/>
+          <circle cx="150" cy="150" r="102" fill="rgba(255,255,255,0.5)" stroke="#e3d5c3" stroke-width="5"/>
+          <circle cx="98" cy="216" r="15" fill="#ff9fb0"/><circle cx="98" cy="209" r="15" fill="#ffd3dd" opacity="0.85"/>
+          <circle cx="128" cy="230" r="16" fill="#8ecdf0"/><circle cx="128" cy="222" r="16" fill="#d3efff" opacity="0.85"/>
+          <circle cx="160" cy="216" r="15" fill="#ffe066"/><circle cx="160" cy="209" r="15" fill="#fff3b0" opacity="0.85"/>
+          <circle cx="188" cy="232" r="14" fill="#b5e48c"/><circle cx="188" cy="225" r="14" fill="#e4f7cd" opacity="0.85"/>
+          <circle cx="205" cy="206" r="12" fill="#d0a2f7"/><circle cx="205" cy="200" r="12" fill="#ecd9ff" opacity="0.85"/>
+          <circle cx="82" cy="196" r="11" fill="#ffb26b"/><circle cx="82" cy="190" r="11" fill="#ffe0bd" opacity="0.85"/>
+          <circle cx="150" cy="238" r="13" fill="#ff8fab"/><circle cx="150" cy="232" r="13" fill="#ffd6e2" opacity="0.85"/>
+          <circle cx="127" cy="140" r="6.5" fill="#3a2a1c"/>
+          <circle cx="173" cy="140" r="6.5" fill="#3a2a1c"/>
+          <path d="M138 160 Q150 171 162 160" stroke="#3a2a1c" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <ellipse cx="106" cy="157" rx="10" ry="5.5" fill="#ffb3a7"/>
+          <ellipse cx="194" cy="157" rx="10" ry="5.5" fill="#ffb3a7"/>
+          <ellipse cx="110" cy="100" rx="27" ry="14" fill="#ffffff" opacity="0.55" transform="rotate(-24 110 100)"/>
+          <path d="M76 64 Q150 -20 224 64 Q188 88 150 88 Q112 88 76 64 Z" fill="#f2732e"/>
+          <path d="M104 30 Q150 6 196 30" stroke="#d95d1e" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <rect x="141" y="-4" width="19" height="27" rx="8" fill="#c85a1e" transform="rotate(6 150 10)"/>
+          <path d="M94 246 L206 246 L220 334 Q150 352 80 334 Z" fill="#d9a066"/>
+          <circle cx="118" cy="286" r="7" fill="#b57e46"/><circle cx="186" cy="300" r="8" fill="#b57e46"/><circle cx="150" cy="322" r="6" fill="#b57e46"/><circle cx="196" cy="266" r="5" fill="#b57e46"/>
+          <rect x="88" y="238" width="124" height="15" rx="7.5" fill="#e2543e"/>
+          <circle cx="150" cy="282" r="17" fill="#cfd6dd" stroke="#9aa5ae" stroke-width="3"/>
+          <rect x="140" y="278" width="20" height="7" rx="3.5" fill="#8b96a0"/>
+          <rect x="127" y="314" width="46" height="27" rx="7" fill="#7a4a22"/>
+          <circle cx="46" cy="86" r="4" fill="#ffd94d"/><circle cx="256" cy="80" r="4" fill="#ffd94d"/><circle cx="266" cy="196" r="3.5" fill="#ff9fb0"/><circle cx="34" cy="210" r="3.5" fill="#8ecdf0"/>
+        </svg>
+        <div class="gacha-logo">わくわくとも<br>グリガチャ</div>
+      </div>
+      <div class="gacha-right">
+        <div class="gacha-panel-y">
+          <button class="gacha-pull" id="gachaPull">ガチャを回す</button>
+          <p class="gacha-cost">1回 🪙 30コイン ／ スコア報酬のものは出ません</p>
+          <p class="gacha-result" id="gachaResultText"></p>
+          <div class="gacha-won hidden" id="gachaWon"></div>
+        </div>
+        <div class="gacha-panel-b">
+          <button class="gacha-list-btn" id="gachaListBtn">何が出るか見る</button>
+          <div class="gacha-list hidden" id="gachaList"></div>
+        </div>
+      </div>
+    </div>
   </div>
   <div id="pausedTag" style="display:none;position:absolute;top:64px;left:50%;transform:translateX(-50%);z-index:8;background:rgba(91,58,23,.88);color:#fff;font-weight:700;font-size:13px;padding:7px 16px;border-radius:999px;pointer-events:none;white-space:nowrap;">一時停止中（メニューを閉じると再開）</div>
   <button id="specialBtn" disabled>ともグリーフラッシュ！</button>
@@ -250,6 +328,7 @@
     <button class="btn" id="startBtn">スタート</button>
     <button class="btn" id="volBtn2" style="background:#8a5a2b;border-bottom-color:#5b3a17;font-size:14px;padding:9px 22px;margin-top:10px;">設定（音量・ガイド）</button>
     <button class="btn" id="dressBtn2" style="background:#ff8fb2;border-bottom-color:#d14e7e;font-size:14px;padding:9px 22px;margin-top:10px;">きがえ</button>
+    <button class="btn" id="gachaBtn2" style="background:#7a4fd0;border-bottom-color:#4e2d8f;font-size:14px;padding:9px 22px;margin-top:10px;">🎰 ガチャ</button>
     <p style="margin-top:4px;">3倍以降、プレイ中に突然「反射神経イベント」が発生！「よーい…スタート！」の合図のあと、縛られたともグリーの周りのどんぐり15個を、消える前に全部タップ。見逃しも毒どんぐりのタップも、ライフが1つ減るだけ（ライフは通常3つ、12倍以降は2つ）。ライフが尽きたらゲームオーバー。</p>
     <p style="margin-top:4px;">着せ替えパーツ（ぼうし・かお・はね・しょっかく、全部で52種類・レアもあるよ）は、ベストスコア報酬のほか、累計で食べた敵の数・ミッション（12倍到達など）・ガチャ（ゲームオーバー時にもらえるコインで回せる）でも手に入るよ。「きがえ」ボタンで着せ替え、図鑑の「コスチューム」タブで一覧と解放条件が見れるよ。3倍までは育ちやすくなっているよ。</p>
     <p style="margin-top:10px;font-size:12px;">PCは矢印キー・WASDでも動けるよ</p>
@@ -521,7 +600,21 @@ function pop(freq) {
   document.getElementById("dressBtn2").addEventListener("click", openDress);
   document.getElementById("dressClose").addEventListener("click", closeDress);
   document.getElementById("dressRandom").addEventListener("click", dressRandom);
-  document.getElementById("gachaBtn").addEventListener("click", pullGacha);
+  document.getElementById("gachaOpenBtn").addEventListener("click", openGacha);
+  document.getElementById("gachaBtn2").addEventListener("click", openGacha);
+  document.getElementById("gachaBack").addEventListener("click", closeGacha);
+  document.getElementById("gachaPull").addEventListener("click", pullGacha);
+  document.getElementById("gachaListBtn").addEventListener("click", function() {
+    const l = document.getElementById("gachaList");
+    if (l.classList.contains("hidden")) { renderGachaList(); l.classList.remove("hidden"); this.textContent = "とじる"; }
+    else { l.classList.add("hidden"); this.textContent = "何が出るか見る"; }
+  });
+  document.getElementById("dressScreen").addEventListener("touchmove", function(e) {
+    if (!(e.target.closest && e.target.closest("#dressGrid"))) e.preventDefault();
+  }, { passive: false });
+  document.getElementById("gachaScreen").addEventListener("touchmove", function(e) {
+    if (!(e.target.closest && e.target.closest("#gachaList"))) e.preventDefault();
+  }, { passive: false });
   document.getElementById("zukanBtn").addEventListener("click", function() { zukanEl.classList.remove("hidden"); zukanTab("main"); });
   document.getElementById("zukanClose").addEventListener("click", function() { zukanEl.classList.add("hidden"); });
   const zgMain = document.getElementById("zukanMainGrid"), zgCost = document.getElementById("zukanCostumeGrid");
@@ -700,19 +793,59 @@ function renderDressStats() {
   const e = document.getElementById("lifeEatenLabel"); if (e) e.textContent = "累計 " + lifeEaten + " 体";
 }
 const GACHA_COST = 30;
+let gachaOpen = false;
+function updateCoinLabels() {
+  renderDressStats();
+  const gc = document.getElementById("gachaCoins"); if (gc) gc.textContent = "🪙 コイン " + coins;
+}
+function openGacha() {
+  gachaOpen = true;
+  document.getElementById("gachaScreen").classList.remove("hidden");
+  updateCoinLabels();
+  document.getElementById("gachaResultText").textContent = "";
+  document.getElementById("gachaWon").classList.add("hidden");
+}
+function closeGacha() {
+  gachaOpen = false;
+  document.getElementById("gachaScreen").classList.add("hidden");
+  if (dressOpen) { renderDressStats(); renderDressGrid(); }
+}
+function renderGachaList() {
+  const box = document.getElementById("gachaList"); if (!box) return;
+  box.innerHTML = "";
+  COSTUME_ITEMS.filter(function(it) { return it.via.t !== "score"; }).forEach(function(it) {
+    const own = costumeUnlocked(it);
+    const d = document.createElement("div");
+    d.className = "gacha-tile" + (own ? " own" : "");
+    const im = document.createElement("img"); im.src = COSTUME_SRC[it.id]; im.alt = it.name;
+    const s = document.createElement("span"); s.textContent = it.name + (own ? " ✓" : "");
+    d.appendChild(im); d.appendChild(s);
+    box.appendChild(d);
+  });
+}
 function pullGacha() {
-  const res = document.getElementById("gachaResult");
-  if (coins < GACHA_COST) { res.textContent = "コインが足りない…（あと " + (GACHA_COST - coins) + "）"; return; }
+  const res = document.getElementById("gachaResultText");
+  const won = document.getElementById("gachaWon");
+  if (coins < GACHA_COST) { res.textContent = "コインが足りない…（あと " + (GACHA_COST - coins) + "）"; won.classList.add("hidden"); return; }
   const pool = COSTUME_ITEMS.filter(function(it) { return it.via.t !== "score" && !costumeUnlocked(it); });
-  if (!pool.length) { res.textContent = "ガチャで出るものは全部ゲット済み！🎉"; return; }
+  if (!pool.length) { res.textContent = "ガチャで出るものは全部ゲット済み！🎉"; won.classList.add("hidden"); return; }
   coins -= GACHA_COST;
   const it = pool[Math.floor(Math.random() * pool.length)];
   gachaOwned[it.id] = true;
   unlockKnown.add(it.id);
   saveStats();
-  res.textContent = "🎉 " + partName(it.part) + "「" + it.name + "」をゲット！";
+  const m = document.getElementById("gachaMachine");
+  if (m) { m.classList.remove("shake"); void m.offsetWidth; m.classList.add("shake"); }
+  res.textContent = "🎉 あたり！";
+  won.innerHTML = "";
+  const im = document.createElement("img"); im.src = COSTUME_SRC[it.id]; im.alt = it.name;
+  const b = document.createElement("b"); b.textContent = partName(it.part) + "「" + it.name + "」をゲット！";
+  won.appendChild(im); won.appendChild(b);
+  won.classList.remove("hidden");
   pop(990); setTimeout(function() { pop(1320); }, 130);
-  renderDressStats(); renderDressGrid();
+  updateCoinLabels();
+  renderGachaList();
+  if (dressOpen) renderDressGrid();
 }
 function closeDress() {
   dressOpen = false;
@@ -1426,7 +1559,7 @@ function drawCostumeFront(x, y, r, crownOn) { drawCostumeImgFront(ctx, x, y, r, 
 const GLASS_FACE = { megane: 1, sunglasses: 1, cyberface: 1, domino: 1, hige: 1, monocle: 1 };
 const FACE_DRAW = { megane: [1.25, 0.02], sunglasses: [1.22, 0.02], cyberface: [1.30, 0.03], domino: [1.15, 0.03], hige: [0.95, 0.27], monocle: [1.30, 0.14], manmarume: [1.28, 0.10], okori: [1.30, 0.11], ikemen: [1.32, 0.10], meromero: [1.32, 0.12], kabuki: [1.34, 0.10], kamisama: [1.30, 0.10] };
 // per-hat draw overrides: [width factor, bottom height] (default is [1.62, 0.08])
-const HAT_DRAW = { futaba: [0.95, 0.40] };
+const HAT_DRAW = { futaba: [0.95, 0.40], nekomimi: [1.45, 0.08], tora: [1.48, 0.08], softcream: [1.42, 0.08], kaizoku: [1.55, 0.08], kingcrown: [1.50, 0.08], dragonhelm: [1.45, 0.08], valkyrie: [1.45, 0.08], crystalwitch: [1.48, 0.08], pharaoh: [1.42, 0.08] };
 // ---- integrated player bases: instead of pasting costumes over the original
 // sprite, the base itself is rewritten per worn part (hat -> the original
 // acorn cap is cut off and the head re-topped with a round body-brown arc,
