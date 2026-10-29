@@ -96,6 +96,8 @@
   .dtab.on { background: #ffb347; }
   #dressGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin-top: 10px; overflow-y: auto; flex: 1; min-height: 0; padding: 2px; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
   body.titleMode #hud, body.titleMode #specialBtn, body.titleMode #flashText, body.titleMode #pausedTag { display: none !important; }
+  #startScreen { background: #fffbee; }
+  #dressGrid { transform: translateZ(0); }
   #gachaScreen { position: absolute; inset: 0; z-index: 16; background: linear-gradient(180deg, #ffedd9, #ffd9ba); padding: 12px; display: flex; flex-direction: column; overflow: hidden; }
   #gachaScreen.hidden { display: none; }
   .gacha-top { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 900px; margin: 0 auto; }
@@ -118,10 +120,13 @@
   .gacha-won img { height: 58px; max-width: 100%; object-fit: contain; }
   .gacha-won b { color: #5b3a17; font-size: 16px; text-align: center; }
   .gacha-list-btn { width: 100%; background: #fff6e6; color: #24507e; font-size: clamp(16px, 3vw, 21px); font-weight: 900; border: 3px solid #bcd9f5; border-bottom: 6px solid #9cc3ea; border-radius: 16px; padding: 12px 8px; cursor: pointer; font-family: inherit; }
-  .gacha-list { overflow-y: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; margin-top: 10px; display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 7px; min-height: 0; }
+  .gacha-list { position: absolute; inset: 10px; z-index: 5; background: #eaf4ff; border: 3px solid #57a8e8; border-radius: 18px; padding: 12px; overflow-y: auto; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; box-shadow: 0 10px 30px rgba(30,80,140,.35); }
   .gacha-list.hidden { display: none; }
-  .gacha-tile { background: #fff; border-radius: 12px; padding: 5px 3px; display: flex; flex-direction: column; align-items: center; gap: 1px; font-size: 10px; font-weight: 700; color: #24507e; text-align: center; }
-  .gacha-tile img { height: 40px; max-width: 100%; object-fit: contain; }
+  .gacha-list-head { display: flex; justify-content: space-between; align-items: center; position: sticky; top: -12px; background: #eaf4ff; padding: 8px 2px 10px; z-index: 1; }
+  .gacha-list-head b { color: #24507e; font-size: 18px; }
+  .gacha-list-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 9px; }
+  .gacha-tile { background: #fff; border-radius: 12px; padding: 8px 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 12px; font-weight: 700; color: #24507e; text-align: center; }
+  .gacha-tile img { height: 72px; max-width: 100%; object-fit: contain; }
   .gacha-tile.own { opacity: .55; }
 
   .dtile { background: #fff; border: 2px solid #f0d9ae; border-radius: 14px; padding: 7px 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; font-family: inherit; }
@@ -290,9 +295,13 @@
         </div>
         <div class="gacha-panel-b">
           <button class="gacha-list-btn" id="gachaListBtn">何が出るか見る</button>
-          <div class="gacha-list hidden" id="gachaList"></div>
+          <p class="gacha-cost" style="color:#eaf4ff;">排出対象は全26種。大きな画面で見られるよ</p>
         </div>
       </div>
+    </div>
+    <div class="gacha-list hidden" id="gachaList">
+      <div class="gacha-list-head"><b>ガチャで出るもの（全26種）</b><button class="btn" id="gachaListClose" style="background:#fff;color:#24507e;border-bottom-color:#9cc3ea;font-size:13px;padding:7px 16px;">とじる</button></div>
+      <div class="gacha-list-grid" id="gachaListGrid"></div>
     </div>
   </div>
   <div id="pausedTag" style="display:none;position:absolute;top:64px;left:50%;transform:translateX(-50%);z-index:8;background:rgba(91,58,23,.88);color:#fff;font-weight:700;font-size:13px;padding:7px 16px;border-radius:999px;pointer-events:none;white-space:nowrap;">一時停止中（メニューを閉じると再開）</div>
@@ -606,9 +615,11 @@ function pop(freq) {
   document.getElementById("gachaBack").addEventListener("click", closeGacha);
   document.getElementById("gachaPull").addEventListener("click", pullGacha);
   document.getElementById("gachaListBtn").addEventListener("click", function() {
-    const l = document.getElementById("gachaList");
-    if (l.classList.contains("hidden")) { renderGachaList(); l.classList.remove("hidden"); this.textContent = "とじる"; }
-    else { l.classList.add("hidden"); this.textContent = "何が出るか見る"; }
+    renderGachaList();
+    document.getElementById("gachaList").classList.remove("hidden");
+  });
+  document.getElementById("gachaListClose").addEventListener("click", function() {
+    document.getElementById("gachaList").classList.add("hidden");
   });
   document.getElementById("dressScreen").addEventListener("touchmove", function(e) {
     if (!(e.target.closest && e.target.closest("#dressGrid"))) e.preventDefault();
@@ -813,7 +824,7 @@ function closeGacha() {
   if (dressOpen) { renderDressStats(); renderDressGrid(); }
 }
 function renderGachaList() {
-  const box = document.getElementById("gachaList"); if (!box) return;
+  const box = document.getElementById("gachaListGrid"); if (!box) return;
   box.innerHTML = "";
   COSTUME_ITEMS.filter(function(it) { return it.via.t !== "score"; }).forEach(function(it) {
     const own = costumeUnlocked(it);
@@ -1744,7 +1755,8 @@ function loop(t) {
   const portrait = isPortraitBlocked(); // landscape-only: portrait freezes the game
   document.getElementById("rotateScreen").classList.toggle("hidden", !portrait);
   if (!portrait && !menuOpen && !dressOpen) { if (state === "reflex") updateReflex(dt); else update(dt); }
-  draw();
+  const covered = dressOpen || gachaOpen || !document.getElementById("zukan").classList.contains("hidden");
+  if (!covered) draw(); // full-screen menus cover the field: skip the 60fps redraw so scrolling stays smooth
   if (state === "playing" || state === "start" || state === "reflex" || portrait) requestAnimationFrame(loop);
   else loopAlive = false;
 }
