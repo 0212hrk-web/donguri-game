@@ -83,7 +83,7 @@
   #zukan { position: absolute; inset: 0; z-index: 20; background: #fff7e8; padding: 16px; overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; align-items: center; }
   #zukan.hidden { display: none; }
   #zukan h3 { font-size: 22px; margin: 4px 0 10px; color: #5b3a17; }
-  #dressScreen { position: absolute; inset: 0; z-index: 15; background: #fff7e8; padding: 14px; overflow: hidden; touch-action: none; display: flex; flex-direction: column; align-items: center; }
+  #dressScreen { position: absolute; inset: 0; z-index: 15; background: #fff7e8; padding: 14px; overflow: hidden; display: flex; flex-direction: column; align-items: center; }
   #dressScreen.hidden { display: none; }
   #dressScreen h3 { font-size: 22px; margin: 4px 0 10px; color: #5b3a17; }
   #dressMain { display: flex; gap: 14px; flex-wrap: nowrap; justify-content: center; align-items: stretch; width: 100%; max-width: 780px; flex: 1; min-height: 0; }
@@ -94,8 +94,9 @@
   #dressTabs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
   .dtab { padding: 10px 16px; border-radius: 999px; border: 2px solid #8a5a2b; background: #fff; color: #5b3a17; font-weight: 700; font-size: 14px; cursor: pointer; font-family: inherit; }
   .dtab.on { background: #ffb347; }
-  #dressGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin-top: 10px; overflow-y: auto; flex: 1; min-height: 0; padding: 2px; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
-  #gachaScreen { position: absolute; inset: 0; z-index: 16; background: linear-gradient(180deg, #ffedd9, #ffd9ba); padding: 12px; display: flex; flex-direction: column; overflow: hidden; touch-action: none; }
+  #dressGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin-top: 10px; overflow-y: auto; flex: 1; min-height: 0; padding: 2px; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+  body.titleMode #hud, body.titleMode #specialBtn, body.titleMode #flashText, body.titleMode #pausedTag { display: none !important; }
+  #gachaScreen { position: absolute; inset: 0; z-index: 16; background: linear-gradient(180deg, #ffedd9, #ffd9ba); padding: 12px; display: flex; flex-direction: column; overflow: hidden; }
   #gachaScreen.hidden { display: none; }
   .gacha-top { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 900px; margin: 0 auto; }
   .gacha-coins { background: #fff; border: 3px solid #e8b34b; border-radius: 999px; padding: 7px 16px; font-weight: 900; color: #8a5a10; font-size: 16px; box-shadow: 0 2px 0 rgba(160,100,20,.25); }
@@ -228,7 +229,7 @@
     <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;width:100%;max-width:760px;margin-bottom:6px;">
       <h3 style="margin:0;">きがえ</h3>
       <span id="coinLabel" style="font-weight:700;color:#b07818;">🪙 コイン 0</span>
-      <span id="lifeEatenLabel" style="font-weight:700;color:#7a5a33;">累計 0 体</span>
+      <span id="lifeEatenLabel" style="font-weight:700;color:#7a5a33;">0種（全52種）</span>
       <button class="btn" id="gachaOpenBtn" style="background:#7a4fd0;border-bottom-color:#4e2d8f;font-size:14px;padding:9px 20px;">🎰 ガチャ画面</button>
     </div>
     <div id="dressMain">
@@ -612,6 +613,7 @@ function pop(freq) {
   document.getElementById("dressScreen").addEventListener("touchmove", function(e) {
     if (!(e.target.closest && e.target.closest("#dressGrid"))) e.preventDefault();
   }, { passive: false });
+  document.getElementById("dressGrid").addEventListener("touchstart", function() { dressScrollMark = this.scrollTop; }, { passive: true });
   document.getElementById("gachaScreen").addEventListener("touchmove", function(e) {
     if (!(e.target.closest && e.target.closest("#gachaList, .gacha-panel-y"))) e.preventDefault();
   }, { passive: false });
@@ -782,7 +784,7 @@ function checkCostumeUnlocks() {
   });
 }
 // ---------- dress-up screen ----------
-let dressPart = "hat", dressOpen = false;
+let dressPart = "hat", dressOpen = false, dressScrollMark = 0;
 function openDress() {
   dressOpen = true;
   document.getElementById("dressScreen").classList.remove("hidden");
@@ -790,7 +792,7 @@ function openDress() {
 }
 function renderDressStats() {
   const c = document.getElementById("coinLabel"); if (c) c.textContent = "🪙 コイン " + coins;
-  const e = document.getElementById("lifeEatenLabel"); if (e) e.textContent = "累計 " + lifeEaten + " 体";
+  const e = document.getElementById("lifeEatenLabel"); if (e) e.textContent = COSTUME_ITEMS.filter(function(it) { return costumeUnlocked(it); }).length + "種（全" + COSTUME_ITEMS.length + "種）";
 }
 const GACHA_COST = 1000;
 let gachaOpen = false;
@@ -893,7 +895,7 @@ function renderDressGrid() {
     inner += un ? (sel ? "<span class=\"dsub\">着用中</span>" : "<span class=\"dsub\">&nbsp;</span>") : "<span class=\"dsub\">" + unlockShort(it) + "</span>";
     b.innerHTML = inner;
     b.disabled = !un;
-    b.addEventListener("click", function() { costumeSel[dressPart] = id; renderDressGrid(); renderDressPreview(); pop(660); });
+    b.addEventListener("click", function() { if (Math.abs(grid.scrollTop - dressScrollMark) > 6) return; costumeSel[dressPart] = id; renderDressGrid(); renderDressPreview(); pop(660); });
     grid.appendChild(b);
   }
   tile(null);
@@ -2029,7 +2031,9 @@ function tryLandscape() {
     }
   } catch (e) {}
 }
+function setTitleMode(on) { document.body.classList.toggle("titleMode", !!on); }
 function startGame() {
+  setTitleMode(false);
   tryLandscape();
   startBGM();
   document.getElementById("specialBtn").style.display = "";
@@ -2048,9 +2052,11 @@ document.getElementById("titleBtn").addEventListener("click", function() {
   if (bgm) { bgm.pause(); try { bgm.currentTime = 0; } catch (e) {} }
   document.getElementById("specialBtn").style.display = "none";
   document.getElementById("startScreen").classList.remove("hidden");
+  setTitleMode(true);
   kickLoop();
 });
 reset();
+setTitleMode(true);
 kickLoop();
 </script>
 </body>
