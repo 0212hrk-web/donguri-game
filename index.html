@@ -97,6 +97,19 @@
   #dressGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin-top: 10px; overflow-y: auto; flex: 1; min-height: 0; padding: 2px; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
   body.titleMode #hud, body.titleMode #specialBtn, body.titleMode #flashText, body.titleMode #pausedTag { display: none !important; }
   #startScreen { background: #fffbee; }
+  #missionScreen { position: absolute; inset: 0; z-index: 15; background: #fff7e8; padding: 14px; overflow: hidden; display: flex; flex-direction: column; align-items: center; }
+  #missionScreen.hidden { display: none; }
+  #missionScreen h3 { font-size: 22px; color: #5b3a17; }
+  #missionList { flex: 1; min-height: 0; overflow-y: auto; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; width: 100%; max-width: 640px; display: flex; flex-direction: column; gap: 8px; padding: 2px; transform: translateZ(0); }
+  .mrow { display: flex; gap: 10px; align-items: center; background: #fff; border: 2px solid #f0d9ae; border-radius: 14px; padding: 8px 10px; }
+  .mrow img { height: 52px; width: 52px; object-fit: contain; flex: none; }
+  .mrow .mtxt { flex: 1; min-width: 0; text-align: left; }
+  .mrow .mtxt b { color: #5b3a17; font-size: 14px; }
+  .mrow .mtxt p { color: #7a5a33; font-size: 12px; line-height: 1.45; }
+  .mbar { height: 8px; background: #f3e3c2; border-radius: 99px; overflow: hidden; margin-top: 4px; }
+  .mbar i { display: block; height: 100%; background: #ffb347; border-radius: 99px; }
+  .mdone { color: #12b76a; font-weight: 900; font-size: 13px; flex: none; }
+  .msec { font-weight: 900; color: #5b3a17; margin: 8px 0 0; text-align: left; width: 100%; }
   #dressGrid { transform: translateZ(0); }
   #gachaScreen { position: absolute; inset: 0; z-index: 16; background: linear-gradient(180deg, #ffedd9, #ffd9ba); padding: 12px; display: flex; flex-direction: column; overflow: hidden; }
   #gachaScreen.hidden { display: none; }
@@ -295,14 +308,21 @@
         </div>
         <div class="gacha-panel-b">
           <button class="gacha-list-btn" id="gachaListBtn">何が出るか見る</button>
-          <p class="gacha-cost" style="color:#eaf4ff;">排出対象は全26種。大きな画面で見られるよ</p>
+          <p class="gacha-cost" style="color:#eaf4ff;">排出対象は全27種。大きな画面で見られるよ</p>
         </div>
       </div>
     </div>
     <div class="gacha-list hidden" id="gachaList">
-      <div class="gacha-list-head"><b>ガチャで出るもの（全26種）</b><button class="btn" id="gachaListClose" style="background:#fff;color:#24507e;border-bottom-color:#9cc3ea;font-size:13px;padding:7px 16px;">とじる</button></div>
+      <div class="gacha-list-head"><b>ガチャで出るもの（全27種）</b><button class="btn" id="gachaListClose" style="background:#fff;color:#24507e;border-bottom-color:#9cc3ea;font-size:13px;padding:7px 16px;">とじる</button></div>
       <div class="gacha-list-grid" id="gachaListGrid"></div>
     </div>
+  </div>
+  <div id="missionScreen" class="hidden">
+    <div style="display:flex;gap:12px;align-items:center;justify-content:center;width:100%;max-width:640px;margin-bottom:8px;">
+      <h3 style="margin:0;">🎯 ミッション</h3>
+      <button class="btn" id="missionClose" style="background:#8a5a2b;border-bottom-color:#5b3a17;font-size:14px;padding:9px 20px;">とじる</button>
+    </div>
+    <div id="missionList"></div>
   </div>
   <div id="pausedTag" style="display:none;position:absolute;top:64px;left:50%;transform:translateX(-50%);z-index:8;background:rgba(91,58,23,.88);color:#fff;font-weight:700;font-size:13px;padding:7px 16px;border-radius:999px;pointer-events:none;white-space:nowrap;">一時停止中（メニューを閉じると再開）</div>
   <button id="specialBtn" disabled style="display:none">ともグリーフラッシュ！</button>
@@ -339,6 +359,7 @@
     <button class="btn" id="volBtn2" style="background:#8a5a2b;border-bottom-color:#5b3a17;font-size:14px;padding:9px 22px;margin-top:10px;">設定（音量・ガイド）</button>
     <button class="btn" id="dressBtn2" style="background:#ff8fb2;border-bottom-color:#d14e7e;font-size:14px;padding:9px 22px;margin-top:10px;">きがえ</button>
     <button class="btn" id="gachaBtn2" style="background:#7a4fd0;border-bottom-color:#4e2d8f;font-size:14px;padding:9px 22px;margin-top:10px;">🎰 ガチャ</button>
+    <button class="btn" id="missionBtn" style="background:#12b76a;border-bottom-color:#0a7a45;font-size:14px;padding:9px 22px;margin-top:10px;">🎯 ミッション</button>
     <p style="margin-top:4px;">3倍以降、プレイ中に突然「反射神経イベント」が発生！「よーい…スタート！」の合図のあと、縛られたともグリーの周りのどんぐり15個を、消える前に全部タップ。見逃しも毒どんぐりのタップも、ライフが1つ減るだけ（ライフは通常3つ、12倍以降は2つ）。ライフが尽きたらゲームオーバー。</p>
     <p style="margin-top:4px;">着せ替えパーツ（ぼうし・かお・はね・しょっかく、全部で52種類・レアもあるよ）は、ベストスコア報酬のほか、累計で食べた敵の数・ミッション（12倍到達など）・ガチャ（ゲームオーバー時にもらえるコインで回せる）でも手に入るよ。「きがえ」ボタンで着せ替え、図鑑の「コスチューム」タブで一覧と解放条件が見れるよ。3倍までは育ちやすくなっているよ。</p>
     <p style="margin-top:10px;font-size:12px;">PCは矢印キー・WASDでも動けるよ</p>
@@ -672,32 +693,32 @@ const PART_DEFS = [
   { id: "wings", name: "はね" }, { id: "antenna", name: "しょっかく" }
 ];
 const COSTUME_ITEMS = [
-  { id: "futaba", part: "hat", name: "ふたば", via: { t: "score", n: 300 } },
-  { id: "megane", part: "face", name: "メガネ", via: { t: "score", n: 600 } },
-  { id: "akuma", part: "wings", name: "あくま", via: { t: "score", n: 1000 } },
-  { id: "heart", part: "antenna", name: "ハート", via: { t: "score", n: 1500 } },
-  { id: "nekomimi", part: "hat", name: "ねこみみ", via: { t: "score", n: 2200 } },
-  { id: "hige", part: "face", name: "ひげ", via: { t: "score", n: 3000 } },
-  { id: "yousei", part: "wings", name: "ようせい", via: { t: "score", n: 4000 } },
-  { id: "light", part: "antenna", name: "ライト", via: { t: "score", n: 5000 } },
-  { id: "ichigo", part: "hat", name: "いちご", via: { t: "score", n: 6500 } },
-  { id: "sunglasses", part: "face", name: "サングラス", via: { t: "score", n: 8000 } },
-  { id: "jet", part: "wings", name: "ジェット", via: { t: "score", n: 10000 } },
-  { id: "hana", part: "antenna", name: "はな", via: { t: "score", n: 12500 } },
-  { id: "party", part: "hat", name: "パーティ", via: { t: "score", n: 15000 } },
-  { id: "manmarume", part: "face", name: "まんまるめ", via: { t: "score", n: 18000 } },
-  { id: "robot", part: "wings", name: "ロボット", via: { t: "score", n: 21000 } },
-  { id: "denpa", part: "antenna", name: "でんぱ", via: { t: "score", n: 25000 } },
-  { id: "tora", part: "hat", name: "とら", via: { t: "score", n: 29000 } },
-  { id: "okori", part: "face", name: "おこりがお", via: { t: "score", n: 33000 } },
-  { id: "happa", part: "wings", name: "はっぱ", via: { t: "score", n: 37000 } },
-  { id: "spring", part: "antenna", name: "スプリング", via: { t: "score", n: 41000 } },
-  { id: "knit", part: "hat", name: "ニットぼう", via: { t: "score", n: 45000 } },
-  { id: "ikemen", part: "face", name: "イケメン", via: { t: "score", n: 49000 } },
-  { id: "crystalwing", part: "wings", name: "クリスタル", via: { t: "score", n: 53000 }, rare: 1 },
-  { id: "candy", part: "antenna", name: "キャンディ", via: { t: "score", n: 57000 } },
+  { id: "futaba", part: "hat", name: "ふたば", via: { t: "gacha" } },
+  { id: "megane", part: "face", name: "メガネ", via: { t: "gacha" } },
+  { id: "akuma", part: "wings", name: "あくま", via: { t: "gacha" } },
+  { id: "heart", part: "antenna", name: "ハート", via: { t: "gacha" } },
+  { id: "nekomimi", part: "hat", name: "ねこみみ", via: { t: "gacha" } },
+  { id: "hige", part: "face", name: "ひげ", via: { t: "gacha" } },
+  { id: "yousei", part: "wings", name: "ようせい", via: { t: "gacha" } },
+  { id: "light", part: "antenna", name: "ライト", via: { t: "gacha" } },
+  { id: "ichigo", part: "hat", name: "いちご", via: { t: "gacha" } },
+  { id: "sunglasses", part: "face", name: "サングラス", via: { t: "gacha" } },
+  { id: "jet", part: "wings", name: "ジェット", via: { t: "gacha" } },
+  { id: "hana", part: "antenna", name: "はな", via: { t: "gacha" } },
+  { id: "party", part: "hat", name: "パーティ", via: { t: "gacha" } },
+  { id: "manmarume", part: "face", name: "まんまるめ", via: { t: "gacha" } },
+  { id: "robot", part: "wings", name: "ロボット", via: { t: "gacha" } },
+  { id: "denpa", part: "antenna", name: "でんぱ", via: { t: "gacha" } },
+  { id: "tora", part: "hat", name: "とら", via: { t: "gacha" } },
+  { id: "okori", part: "face", name: "おこりがお", via: { t: "gacha" } },
+  { id: "happa", part: "wings", name: "はっぱ", via: { t: "gacha" } },
+  { id: "spring", part: "antenna", name: "スプリング", via: { t: "gacha" } },
+  { id: "knit", part: "hat", name: "ニットぼう", via: { t: "gacha" } },
+  { id: "ikemen", part: "face", name: "イケメン", via: { t: "gacha" } },
+  { id: "crystalwing", part: "wings", name: "クリスタル", via: { t: "score", n: 91000 }, rare: 1 },
+  { id: "candy", part: "antenna", name: "キャンディ", via: { t: "gacha" } },
   { id: "softcream", part: "hat", name: "ソフトクリーム", via: { t: "score", n: 61000 } },
-  { id: "kaeru", part: "hat", name: "かえる", via: { t: "score", n: 65000 } },
+  { id: "kaeru", part: "hat", name: "かえる", via: { t: "gacha" } },
   { id: "kaizoku", part: "hat", name: "かいぞく", via: { t: "eaten", n: 100 } },
   { id: "cyberface", part: "face", name: "サイバー", via: { t: "eaten", n: 300 }, rare: 1 },
   { id: "houou", part: "wings", name: "ほうおう", via: { t: "eaten", n: 800 }, rare: 1 },
@@ -709,21 +730,21 @@ const COSTUME_ITEMS = [
   { id: "ryunotsuno", part: "antenna", name: "りゅうのツノ", via: { t: "mission", m: "meteor5" }, rare: 1 },
   { id: "meromero", part: "face", name: "メロメロ", via: { t: "mission", m: "reflexP" }, rare: 1 },
   { id: "mahou", part: "hat", name: "まほうつかい", via: { t: "gacha" } },
-  { id: "cyberhelmet", part: "hat", name: "サイバーヘルメット", via: { t: "gacha" }, rare: 1 },
-  { id: "valkyrie", part: "hat", name: "戦乙女の兜", via: { t: "gacha" }, rare: 1 },
-  { id: "crystalwitch", part: "hat", name: "クリスタル魔女帽", via: { t: "gacha" }, rare: 1 },
-  { id: "pharaoh", part: "hat", name: "ファラオの頭飾り", via: { t: "gacha" }, rare: 1 },
-  { id: "domino", part: "face", name: "ドミノマスク", via: { t: "gacha" }, rare: 1 },
-  { id: "kabuki", part: "face", name: "かぶき", via: { t: "gacha" }, rare: 1 },
-  { id: "monocle", part: "face", name: "モノクル", via: { t: "gacha" }, rare: 1 },
-  { id: "kamisama", part: "face", name: "神様", via: { t: "gacha" }, rare: 1 },
-  { id: "ougon", part: "wings", name: "おうごんのりゅう", via: { t: "gacha" }, rare: 1 },
-  { id: "cyberwing", part: "wings", name: "サイバー", via: { t: "gacha" }, rare: 1 },
-  { id: "tenshinotsubasa", part: "wings", name: "てんしのつばさ", via: { t: "gacha" }, rare: 1 },
-  { id: "kaminari", part: "antenna", name: "かみなり", via: { t: "gacha" }, rare: 1 },
-  { id: "cyberant", part: "antenna", name: "サイバー", via: { t: "gacha" }, rare: 1 },
-  { id: "hoshi", part: "antenna", name: "ほし", via: { t: "gacha" }, rare: 1 },
-  { id: "laser", part: "antenna", name: "レーザー", via: { t: "gacha" }, rare: 1 }
+  { id: "cyberhelmet", part: "hat", name: "サイバーヘルメット", via: { t: "score", n: 23000 }, rare: 1 },
+  { id: "valkyrie", part: "hat", name: "戦乙女の兜", via: { t: "score", n: 103000 }, rare: 1 },
+  { id: "crystalwitch", part: "hat", name: "クリスタル魔女帽", via: { t: "score", n: 47000 }, rare: 1 },
+  { id: "pharaoh", part: "hat", name: "ファラオの頭飾り", via: { t: "score", n: 161000 }, rare: 1 },
+  { id: "domino", part: "face", name: "ドミノマスク", via: { t: "score", n: 12000 }, rare: 1 },
+  { id: "kabuki", part: "face", name: "かぶき", via: { t: "score", n: 38000 }, rare: 1 },
+  { id: "monocle", part: "face", name: "モノクル", via: { t: "score", n: 80000 }, rare: 1 },
+  { id: "kamisama", part: "face", name: "神様", via: { t: "score", n: 130000 }, rare: 1 },
+  { id: "ougon", part: "wings", name: "おうごんのりゅう", via: { t: "score", n: 145000 }, rare: 1 },
+  { id: "cyberwing", part: "wings", name: "サイバー", via: { t: "score", n: 17000 }, rare: 1 },
+  { id: "tenshinotsubasa", part: "wings", name: "てんしのつばさ", via: { t: "score", n: 56000 }, rare: 1 },
+  { id: "kaminari", part: "antenna", name: "かみなり", via: { t: "score", n: 30000 }, rare: 1 },
+  { id: "cyberant", part: "antenna", name: "サイバー", via: { t: "score", n: 70000 }, rare: 1 },
+  { id: "hoshi", part: "antenna", name: "ほし", via: { t: "score", n: 8000 }, rare: 1 },
+  { id: "laser", part: "antenna", name: "レーザー", via: { t: "score", n: 116000 }, rare: 1 }
 ];
 const COSTUME_SRC = {
   futaba: "data:image/webp;base64,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", megane: "data:image/webp;base64,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", heart: "data:image/webp;base64,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",
@@ -826,7 +847,7 @@ function closeGacha() {
 function renderGachaList() {
   const box = document.getElementById("gachaListGrid"); if (!box) return;
   box.innerHTML = "";
-  COSTUME_ITEMS.filter(function(it) { return it.via.t !== "score"; }).forEach(function(it) {
+  COSTUME_ITEMS.filter(function(it) { return it.via.t !== "score" && !it.rare; }).forEach(function(it) {
     const own = costumeUnlocked(it);
     const d = document.createElement("div");
     d.className = "gacha-tile" + (own ? " own" : "");
@@ -840,7 +861,7 @@ function pullGacha() {
   const res = document.getElementById("gachaResultText");
   const won = document.getElementById("gachaWon");
   if (coins < GACHA_COST) { res.textContent = "コインが足りない…（あと " + (GACHA_COST - coins) + "）"; won.classList.add("hidden"); return; }
-  const pool = COSTUME_ITEMS.filter(function(it) { return it.via.t !== "score" && !costumeUnlocked(it); });
+  const pool = COSTUME_ITEMS.filter(function(it) { return it.via.t !== "score" && !it.rare && !costumeUnlocked(it); });
   if (!pool.length) { res.textContent = "ガチャで出るものは全部ゲット済み！🎉"; won.classList.add("hidden"); return; }
   coins -= GACHA_COST;
   const it = pool[Math.floor(Math.random() * pool.length)];
@@ -863,6 +884,52 @@ function pullGacha() {
 function closeDress() {
   dressOpen = false;
   document.getElementById("dressScreen").classList.add("hidden");
+}
+// ---------- missions screen ----------
+let missionOpen = false;
+function missionProgress(it) {
+  const v = it.via;
+  if (v.t === "eaten") return { cur: Math.min(lifeEaten, v.n), max: v.n, label: "累計 " + lifeEaten + " 体 ／ " + v.n + " 体" };
+  if (v.m === "run100") return { cur: Math.min(bestRunEaten, 100), max: 100, label: "1プレイのベスト " + bestRunEaten + " 体 ／ 100 体" };
+  if (v.m === "ratio12") return { cur: Math.min(lifeMaxRatio, 12), max: 12, label: "最大 " + lifeMaxRatio.toFixed(1) + " 倍 ／ 12 倍" };
+  if (v.m === "ratio16") return { cur: Math.min(lifeMaxRatio, 16), max: 16, label: "最大 " + lifeMaxRatio.toFixed(1) + " 倍 ／ 16 倍" };
+  if (v.m === "meteor5") return { cur: Math.min(meteorSurvived, 5), max: 5, label: meteorSurvived + " 回 ／ 5 回" };
+  if (v.m === "reflexP") return { cur: reflexPerfect ? 1 : 0, max: 1, label: reflexPerfect ? "達成！" : "まだ達成していない" };
+  return { cur: 0, max: 1, label: "" };
+}
+function openMissions() {
+  missionOpen = true;
+  document.getElementById("missionScreen").classList.remove("hidden");
+  renderMissions();
+}
+function closeMissions() {
+  missionOpen = false;
+  document.getElementById("missionScreen").classList.add("hidden");
+}
+function renderMissions() {
+  const box = document.getElementById("missionList"); if (!box) return;
+  box.innerHTML = "";
+  function section(title, items) {
+    const h = document.createElement("p"); h.className = "msec"; h.textContent = title; box.appendChild(h);
+    items.forEach(function(it) {
+      const done = costumeUnlocked(it);
+      const pr = missionProgress(it);
+      const row = document.createElement("div"); row.className = "mrow";
+      const im = document.createElement("img"); im.src = COSTUME_SRC[it.id]; im.alt = it.name;
+      const tx = document.createElement("div"); tx.className = "mtxt";
+      const b = document.createElement("b"); b.textContent = (it.rare ? "✨レア " : "") + partName(it.part) + "「" + it.name + "」";
+      const p = document.createElement("p"); p.textContent = unlockText(it).replace(/^ミッション：/, "") + "（" + pr.label + "）";
+      const bar = document.createElement("div"); bar.className = "mbar";
+      const fill = document.createElement("i"); fill.style.width = Math.min(100, pr.max ? (pr.cur / pr.max) * 100 : 0) + "%";
+      bar.appendChild(fill);
+      tx.appendChild(b); tx.appendChild(p); tx.appendChild(bar);
+      row.appendChild(im); row.appendChild(tx);
+      if (done) { const d = document.createElement("span"); d.className = "mdone"; d.textContent = "✓ ゲット済み"; row.appendChild(d); }
+      box.appendChild(row);
+    });
+  }
+  section("ミッション", COSTUME_ITEMS.filter(function(it) { return it.via.t === "mission"; }));
+  section("累計記録", COSTUME_ITEMS.filter(function(it) { return it.via.t === "eaten"; }));
 }
 function renderDressPreview() {
   const c = document.getElementById("dressCanvas"); if (!c) return;
