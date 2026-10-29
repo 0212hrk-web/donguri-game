@@ -196,7 +196,7 @@
     <p style="margin-top:6px;">3倍まで大きくなると、直線で突進してくる速い敵が出てくる。そこから2倍大きくなるごとに敵が1.3倍速くなる。最大16倍まで成長できるよ。</p>
     <p style="margin-top:4px;">暗い紫色の「毒ガーロラ」は、小さくても触るとアウト。絶対に触っちゃダメ。突進してくることもあるよ。</p>
     <p style="margin-top:4px;">5倍から隕石タイム、6倍からモヤモヤで視界が悪化、7倍からは30体食べるごとに右か左の1/4が真っ暗になるよ。大きくなると当たり判定も少しずつ大きくなる。</p>
-    <p style="margin-top:4px;">12倍になると王冠ゲット＆超隕石タイム（隕石が次々に狙ってくる）。大きさが変わる敵も出てくるよ。キャラの詳しい説明は「設定（音量・ガイド）」→「図鑑を見る」で見れるよ。</p>
+    <p style="margin-top:4px;">12倍になると王冠ゲット＆超隕石タイム（隕石が次々に狙ってくる）。大きさが変わる敵も出てくるし、BGMも速く・高くなって焦るよ。キャラの詳しい説明は「設定（音量・ガイド）」→「図鑑を見る」で見れるよ。</p>
     <p style="margin-top:4px;">16倍（最大）到達後は、食べた敵5体ごとに敵が速くなり、毒ガーロラも増えていくよ。</p>
     <p style="margin-top:10px;">エネルギーが100%たまると必殺技<b>「ともグリーフラッシュ！」</b>で周りの敵を全部消せるよ。</p>
     <p style="margin-top:4px;">敵の髪の色は大きさで変わるよ（青→緑→黄→オレンジ→赤→紫の順に大きい）。</p>
@@ -424,6 +424,13 @@ function startBGM() {
   ensureBgmGraph(); applyBgmVolume();
   try { if (bgm.paused) { const p = bgm.play(); if (p && p.catch) p.catch(function() {}); } } catch (e) {}
 }
+// From 12x on, the BGM plays faster and higher-pitched for urgency.
+// preservesPitch=false makes the pitch rise together with the speed.
+let bgmFast = false;
+function setBgmRate(rate) {
+  try { bgm.preservesPitch = false; } catch (e) {}
+  try { bgm.playbackRate = rate; } catch (e) {}
+}
 let audioCtx = null;
 function pop(freq) {
   if (vol.se <= 0) return;
@@ -497,6 +504,7 @@ function reset() {
   chashu = null; chashuTimer = 9 + Math.random() * 5; debuff = 0; lagTimer = 0;
   crownAnnounced = false; obscure = null; obscureTimer = 12 + Math.random() * 8;
   reflex = null; reflexTimer = 22 + Math.random() * 10;
+  bgmFast = false; setBgmRate(1);
   meteorEvent = null; meteorTimer = 16 + Math.random() * 10; shake = 0;
   maxReached = false; eatenBase = 0; lastPostStage = 0; darkHalf = null; lastDarkStage = 0; darkBase = 0; darkBaseSet = false;
   document.getElementById("debuffChip").style.display = "none";
@@ -672,6 +680,7 @@ function update(dt) {
     showBanner("12倍到達！ともグリーに王冠！", "#c99600", 1700);
     pop(700);
   }
+  if (ratioNow >= 12 && !bgmFast) { bgmFast = true; setBgmRate(1.25); }
   if (!meteorEvent) {
     // no murk during meteor time: the fog neither starts nor lingers then
     if (ratioNow >= 6 && !obscure) { obscureTimer -= dt; if (obscureTimer <= 0) startObscure(); }
