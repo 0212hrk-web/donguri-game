@@ -494,7 +494,7 @@ function updateMeteor(dt) {
     else if (m.state === "boom") { m.bt += dt; }
   });
   ev.list = ev.list.filter(function(m) { return !(m.state === "boom" && m.bt > 0.5); });
-  if (ev.t <= 0 && ev.list.length === 0) { meteorEvent = null; meteorTimer = 30 + Math.random() * 18; if (state === "playing") { meteorSurvived++; saveStats(); checkCostumeUnlocks(); } }
+  if (ev.t <= 0 && ev.list.length === 0) { meteorEvent = null; meteorTimer = 30 + Math.random() * 18; if (state === "playing") { meteorSurvived++; meteorRun++; bestMeteorRun = Math.max(bestMeteorRun, meteorRun); saveStats(); checkCostumeUnlocks(); } }
 }
 // Enemy speed stages: from 3x size on, every further 2x of growth
 // multiplies enemy speed by 1.3 (stage 1 at 5x, stage 2 at 7x, ...).
@@ -726,22 +726,22 @@ const COSTUME_ITEMS = [
   { id: "kaeru", part: "hat", name: "かえる", via: { t: "gacha" } },
   { id: "kaizoku", part: "hat", name: "かいぞく", via: { t: "eaten", n: 100 } },
   { id: "cyberface", part: "face", name: "サイバー", via: { t: "eaten", n: 300 }, rare: 1 },
-  { id: "houou", part: "wings", name: "ほうおう", via: { t: "eaten", n: 800 }, rare: 1 },
+  { id: "houou", part: "wings", name: "ほうおう", via: { t: "score", n: 45000 }, rare: 1 },
   { id: "crystalant", part: "antenna", name: "クリスタル", via: { t: "eaten", n: 1500 }, rare: 1 },
   { id: "kingcrown", part: "hat", name: "王様の王冠", via: { t: "score", n: 63000 }, rare: 1 },
-  { id: "helmet", part: "hat", name: "ヘルメット", via: { t: "mission", m: "run100" } },
-  { id: "galaxy", part: "wings", name: "ギャラクシー", via: { t: "mission", m: "ratio12" }, rare: 1 },
+  { id: "helmet", part: "hat", name: "ヘルメット", via: { t: "mission", m: "run200" } },
+  { id: "galaxy", part: "wings", name: "ギャラクシー", via: { t: "score", n: 13000 }, rare: 1 },
   { id: "dragonhelm", part: "hat", name: "竜の兜", via: { t: "mission", m: "ratio16" }, rare: 1 },
-  { id: "ryunotsuno", part: "antenna", name: "りゅうのツノ", via: { t: "mission", m: "meteor5" }, rare: 1 },
-  { id: "meromero", part: "face", name: "メロメロ", via: { t: "mission", m: "reflexP" }, rare: 1 },
+  { id: "ryunotsuno", part: "antenna", name: "りゅうのツノ", via: { t: "mission", m: "meteorRun3" }, rare: 1 },
+  { id: "meromero", part: "face", name: "メロメロ", via: { t: "mission", m: "reflexP3" }, rare: 1 },
   { id: "mahou", part: "hat", name: "まほうつかい", via: { t: "gacha" } },
   { id: "cyberhelmet", part: "hat", name: "サイバーヘルメット", via: { t: "score", n: 18500 }, rare: 1 },
   { id: "valkyrie", part: "hat", name: "戦乙女の兜", via: { t: "score", n: 60000 }, rare: 1 },
   { id: "crystalwitch", part: "hat", name: "クリスタル魔女帽", via: { t: "score", n: 64000 }, rare: 1 },
   { id: "pharaoh", part: "hat", name: "ファラオの頭飾り", via: { t: "score", n: 65000 }, rare: 1 },
-  { id: "domino", part: "face", name: "ドミノマスク", via: { t: "score", n: 13000 }, rare: 1 },
+  { id: "domino", part: "face", name: "ドミノマスク", via: { t: "mission", m: "ratio14" }, rare: 1 },
   { id: "kabuki", part: "face", name: "かぶき", via: { t: "score", n: 26000 }, rare: 1 },
-  { id: "monocle", part: "face", name: "モノクル", via: { t: "score", n: 45000 }, rare: 1 },
+  { id: "monocle", part: "face", name: "モノクル", via: { t: "eaten", n: 800 }, rare: 1 },
   { id: "kamisama", part: "face", name: "神様", via: { t: "score", n: 57000 }, rare: 1 },
   { id: "ougon", part: "wings", name: "おうごんのりゅう", via: { t: "score", n: 30500 }, rare: 1 },
   { id: "cyberwing", part: "wings", name: "サイバー", via: { t: "score", n: 15500 }, rare: 1 },
@@ -772,30 +772,35 @@ Object.keys(COSTUME_SRC).forEach(function(k) { const im = new Image(); im.src = 
 let costumeSel = { hat: "none", face: "none", wings: "none", antenna: "none" };
 let unlockKnown = new Set();
 // lifetime stats for the extra unlock routes (eaten milestones, missions, gacha)
-let lifeEaten = 0, coins = 0, bestRunEaten = 0, lifeMaxRatio = 1, meteorSurvived = 0, reflexPerfect = false;
+let lifeEaten = 0, coins = 0, bestRunEaten = 0, lifeMaxRatio = 1, meteorSurvived = 0, reflexPerfect = false, bestMeteorRun = 0, reflexPerfectCount = 0;
+let meteorRun = 0; // meteor events survived in the current run
 const gachaOwned = {};
-function saveStats() { try { localStorage.setItem("donguri_stats", JSON.stringify({ e: lifeEaten, c: coins, bre: bestRunEaten, mr: lifeMaxRatio, ms: meteorSurvived, rp: reflexPerfect ? 1 : 0, g: Object.keys(gachaOwned) })); } catch (e) {} }
-function loadStats() { try { const s = JSON.parse(localStorage.getItem("donguri_stats") || "null"); if (!s) return; lifeEaten = s.e || 0; coins = s.c || 0; bestRunEaten = s.bre || 0; lifeMaxRatio = s.mr || 1; meteorSurvived = s.ms || 0; reflexPerfect = !!s.rp; (s.g || []).forEach(function(id) { gachaOwned[id] = true; }); } catch (e) {} }
+function saveStats() { try { localStorage.setItem("donguri_stats", JSON.stringify({ e: lifeEaten, c: coins, bre: bestRunEaten, mr: lifeMaxRatio, ms: meteorSurvived, rp: reflexPerfect ? 1 : 0, bmr: bestMeteorRun, rpc: reflexPerfectCount, g: Object.keys(gachaOwned) })); } catch (e) {} }
+function loadStats() { try { const s = JSON.parse(localStorage.getItem("donguri_stats") || "null"); if (!s) return; lifeEaten = s.e || 0; coins = s.c || 0; bestRunEaten = s.bre || 0; lifeMaxRatio = s.mr || 1; meteorSurvived = s.ms || 0; reflexPerfect = !!s.rp; bestMeteorRun = s.bmr || 0; reflexPerfectCount = s.rpc != null ? s.rpc : (s.rp ? 1 : 0); (s.g || []).forEach(function(id) { gachaOwned[id] = true; }); } catch (e) {} }
 const MISSION_TEXT = {
-  run100: "ミッション：1回のプレイで敵を100体食べると解放",
-  ratio12: "ミッション：大きさ12倍に到達すると解放",
+  run200: "ミッション：1回のプレイで敵を200体食べると解放",
+  ratio14: "ミッション：大きさ14倍に到達すると解放",
   ratio16: "ミッション：大きさ16倍（最大）に到達すると解放",
-  meteor5: "ミッション：隕石タイムを5回生き延びると解放",
-  reflexP: "ミッション：反射イベントをノーミスでクリアすると解放"
+  meteorRun3: "ミッション：1回のプレイで隕石タイムを3回生き延びると解放",
+  reflexP3: "ミッション：反射イベントをノーミスで3回クリアすると解放"
 };
 function partName(pid) { for (let i = 0; i < PART_DEFS.length; i++) if (PART_DEFS[i].id === pid) return PART_DEFS[i].name; return ""; }
 function costumeUnlocked(it) {
   if (gachaOwned[it.id]) return true;
   if (it.id === "kingcrown" && lifeEaten >= 3000) return true; // earned under the old milestone route
+  if (it.id === "galaxy" && Math.max(lifeMaxRatio, player ? player.r / START_R : 1) >= 14) return true; // earned as the old 14x mission reward
+  if (it.id === "houou" && lifeEaten >= 800) return true; // earned under the old milestone route
+  if (it.id === "domino" && Math.max(best, score || 0) >= 13000) return true; // earned under the old score route
+  if (it.id === "monocle" && Math.max(best, score || 0) >= 45000) return true; // earned under the old score route
   const v = it.via;
   if (v.t === "score") return Math.max(best, score || 0) >= v.n;
   if (v.t === "eaten") return lifeEaten >= v.n;
   if (v.t === "gacha") return false;
-  if (v.m === "run100") return bestRunEaten >= 100 || (eaten || 0) >= 100;
-  if (v.m === "ratio12") return Math.max(lifeMaxRatio, player ? player.r / START_R : 1) >= 12;
+  if (v.m === "run200") return bestRunEaten >= 200 || (eaten || 0) >= 200;
+  if (v.m === "ratio14") return Math.max(lifeMaxRatio, player ? player.r / START_R : 1) >= 14;
   if (v.m === "ratio16") return Math.max(lifeMaxRatio, player ? player.r / START_R : 1) >= 16;
-  if (v.m === "meteor5") return meteorSurvived >= 5;
-  if (v.m === "reflexP") return reflexPerfect;
+  if (v.m === "meteorRun3") return Math.max(bestMeteorRun, meteorRun || 0) >= 3;
+  if (v.m === "reflexP3") return reflexPerfectCount >= 3;
   return false;
 }
 function unlockText(it) {
@@ -896,11 +901,11 @@ let missionOpen = false;
 function missionProgress(it) {
   const v = it.via;
   if (v.t === "eaten") return { cur: Math.min(lifeEaten, v.n), max: v.n, label: "累計 " + lifeEaten + " 体 ／ " + v.n + " 体" };
-  if (v.m === "run100") return { cur: Math.min(bestRunEaten, 100), max: 100, label: "1プレイのベスト " + bestRunEaten + " 体 ／ 100 体" };
-  if (v.m === "ratio12") return { cur: Math.min(lifeMaxRatio, 12), max: 12, label: "最大 " + lifeMaxRatio.toFixed(1) + " 倍 ／ 12 倍" };
+  if (v.m === "run200") return { cur: Math.min(bestRunEaten, 200), max: 200, label: "1プレイのベスト " + bestRunEaten + " 体 ／ 200 体" };
+  if (v.m === "ratio14") return { cur: Math.min(lifeMaxRatio, 14), max: 14, label: "最大 " + lifeMaxRatio.toFixed(1) + " 倍 ／ 14 倍" };
   if (v.m === "ratio16") return { cur: Math.min(lifeMaxRatio, 16), max: 16, label: "最大 " + lifeMaxRatio.toFixed(1) + " 倍 ／ 16 倍" };
-  if (v.m === "meteor5") return { cur: Math.min(meteorSurvived, 5), max: 5, label: meteorSurvived + " 回 ／ 5 回" };
-  if (v.m === "reflexP") return { cur: reflexPerfect ? 1 : 0, max: 1, label: reflexPerfect ? "達成！" : "まだ達成していない" };
+  if (v.m === "meteorRun3") return { cur: Math.min(bestMeteorRun, 3), max: 3, label: "1プレイのベスト " + bestMeteorRun + " 回 ／ 3 回" };
+  if (v.m === "reflexP3") return { cur: Math.min(reflexPerfectCount, 3), max: 3, label: "ノーミスクリア " + reflexPerfectCount + " 回 ／ 3 回" };
   return { cur: 0, max: 1, label: "" };
 }
 function openMissions() {
@@ -1921,7 +1926,7 @@ function startReflexEvent() {
   specialSound();
 }
 function clearReflexEvent() {
-  if (reflex && reflex.misses === 0 && !reflexPerfect) { reflexPerfect = true; saveStats(); }
+  if (reflex && reflex.misses === 0) { reflexPerfectCount++; reflexPerfect = true; saveStats(); checkCostumeUnlocks(); }
   reflex = null;
   state = "playing";
   zoom = Math.max(0.22, Math.min(1, Math.pow(START_R / player.r, 0.55))); // restore the growth camera
@@ -2125,7 +2130,7 @@ function startGame() {
   document.getElementById("pausedTag").style.display = menuOpen ? "" : "none";
   document.getElementById("startScreen").classList.add("hidden");
   document.getElementById("overScreen").classList.add("hidden");
-  reset(); state = "playing"; lastT = performance.now();
+  reset(); meteorRun = 0; state = "playing"; lastT = performance.now();
   kickLoop();
 }
 document.getElementById("startBtn").addEventListener("click", startGame);
