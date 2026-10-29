@@ -86,9 +86,10 @@
   #dressScreen { position: absolute; inset: 0; z-index: 15; background: #fff7e8; padding: 14px; overflow: hidden; touch-action: none; display: flex; flex-direction: column; align-items: center; }
   #dressScreen.hidden { display: none; }
   #dressScreen h3 { font-size: 22px; margin: 4px 0 10px; color: #5b3a17; }
-  #dressMain { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 780px; flex: 1; min-height: 0; }
-  #dressPreviewBox { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-  #dressCanvas { width: min(300px, 78vw, 46vh); height: auto; aspect-ratio: 1; background: linear-gradient(#aee3ff, #e8f9e8); border: 3px solid #8a5a2b; border-radius: 18px; }
+  #dressMain { display: flex; gap: 14px; flex-wrap: nowrap; justify-content: center; align-items: stretch; width: 100%; max-width: 780px; flex: 1; min-height: 0; }
+  #dressPreviewBox { display: flex; flex-direction: column; align-items: center; gap: 8px; min-height: 0; width: min(300px, 36%); flex-shrink: 1; }
+  #dressCanvasWrap { flex: 1; min-height: 0; width: 100%; display: flex; align-items: center; justify-content: center; }
+  #dressCanvas { width: auto; height: auto; max-width: 100%; max-height: 100%; aspect-ratio: 1; background: linear-gradient(#aee3ff, #e8f9e8); border: 3px solid #8a5a2b; border-radius: 18px; }
   #dressSide { flex: 1; min-width: min(320px, 92vw); max-width: 440px; display: flex; flex-direction: column; min-height: 0; }
   #dressTabs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
   .dtab { padding: 10px 16px; border-radius: 999px; border: 2px solid #8a5a2b; background: #fff; color: #5b3a17; font-weight: 700; font-size: 14px; cursor: pointer; font-family: inherit; }
@@ -99,21 +100,21 @@
   .gacha-top { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 900px; margin: 0 auto; }
   .gacha-coins { background: #fff; border: 3px solid #e8b34b; border-radius: 999px; padding: 7px 16px; font-weight: 900; color: #8a5a10; font-size: 16px; box-shadow: 0 2px 0 rgba(160,100,20,.25); }
   .gacha-main { flex: 1; min-height: 0; display: flex; gap: 14px; width: 100%; max-width: 900px; margin: 8px auto 0; }
-  .gacha-left { flex: 1.05; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 0; }
-  .gacha-machine { width: min(290px, 86%); filter: drop-shadow(0 6px 10px rgba(150,80,20,.25)); }
+  .gacha-left { flex: 1.05; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 0; min-height: 0; }
+  .gacha-machine { width: auto; height: 74%; max-width: 94%; filter: drop-shadow(0 6px 10px rgba(150,80,20,.25)); }
   .gacha-machine.shake { animation: gachaShake .55s ease; }
   @keyframes gachaShake { 0%,100% { transform: rotate(0deg); } 20% { transform: rotate(-2.4deg); } 45% { transform: rotate(2.2deg); } 70% { transform: rotate(-1.2deg); } }
-  .gacha-logo { font-weight: 900; font-size: clamp(22px, 4.6vw, 34px); line-height: 1.18; color: #6b4423; text-shadow: 2px 2px 0 #fff, -2px 2px 0 #fff, 2px -2px 0 #fff, -2px -2px 0 #fff, 0 4px 0 #fff; margin-top: 2px; text-align: center; }
-  .gacha-right { flex: 1; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-  .gacha-panel-y { background: #ffd94d; border-radius: 20px; padding: 14px; box-shadow: 0 4px 0 rgba(170,120,20,.35); }
-  .gacha-panel-b { background: #57a8e8; border-radius: 20px; padding: 14px; box-shadow: 0 4px 0 rgba(30,90,160,.35); flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .gacha-logo { font-weight: 900; font-size: clamp(19px, 4vw, 30px); line-height: 1.18; color: #6b4423; text-shadow: 2px 2px 0 #fff, -2px 2px 0 #fff, 2px -2px 0 #fff, -2px -2px 0 #fff, 0 4px 0 #fff; margin-top: 2px; text-align: center; }
+  .gacha-right { flex: 1; display: flex; flex-direction: column; gap: 12px; min-width: 0; min-height: 0; overflow: hidden; }
+  .gacha-panel-y { background: #ffd94d; border-radius: 20px; padding: 14px; box-shadow: 0 4px 0 rgba(170,120,20,.35); flex-shrink: 1; min-height: 0; overflow-y: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
+  .gacha-panel-b { background: #57a8e8; border-radius: 20px; padding: 14px; box-shadow: 0 4px 0 rgba(30,90,160,.35); flex: 1; min-height: 0; flex-shrink: 0; display: flex; flex-direction: column; }
   .gacha-pull { width: 100%; background: #fff6e6; color: #5b3a17; font-size: clamp(20px, 3.6vw, 27px); font-weight: 900; border: 3px solid #e8b34b; border-bottom: 6px solid #d9a441; border-radius: 16px; padding: 14px 8px; cursor: pointer; font-family: inherit; }
   .gacha-pull:active { transform: translateY(2px); }
   .gacha-cost { text-align: center; font-weight: 700; color: #7a5410; margin-top: 8px; font-size: 13px; }
   .gacha-result { text-align: center; font-weight: 900; color: #c22e5f; min-height: 22px; margin-top: 6px; font-size: 15px; }
   .gacha-won { display: flex; flex-direction: column; align-items: center; gap: 2px; margin-top: 6px; background: rgba(255,255,255,.65); border-radius: 14px; padding: 8px; }
   .gacha-won.hidden { display: none; }
-  .gacha-won img { height: 74px; max-width: 100%; object-fit: contain; }
+  .gacha-won img { height: 58px; max-width: 100%; object-fit: contain; }
   .gacha-won b { color: #5b3a17; font-size: 16px; text-align: center; }
   .gacha-list-btn { width: 100%; background: #fff6e6; color: #24507e; font-size: clamp(16px, 3vw, 21px); font-weight: 900; border: 3px solid #bcd9f5; border-bottom: 6px solid #9cc3ea; border-radius: 16px; padding: 12px 8px; cursor: pointer; font-family: inherit; }
   .gacha-list { overflow-y: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; margin-top: 10px; display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 7px; min-height: 0; }
@@ -121,7 +122,7 @@
   .gacha-tile { background: #fff; border-radius: 12px; padding: 5px 3px; display: flex; flex-direction: column; align-items: center; gap: 1px; font-size: 10px; font-weight: 700; color: #24507e; text-align: center; }
   .gacha-tile img { height: 40px; max-width: 100%; object-fit: contain; }
   .gacha-tile.own { opacity: .55; }
-  @media (max-aspect-ratio: 1/1) { .gacha-main { flex-direction: column; } .gacha-machine { width: min(200px, 60%); } }
+
   .dtile { background: #fff; border: 2px solid #f0d9ae; border-radius: 14px; padding: 7px 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; font-family: inherit; }
   .dtile img { height: 52px; max-width: 100%; object-fit: contain; }
   .dtile.sel { border-color: #ff8fb2; background: #fff0f5; box-shadow: 0 0 0 2px #ff8fb2 inset; }
@@ -224,16 +225,15 @@
     <button class="btn" id="zukanClose" style="margin-top:16px;font-size:16px;padding:12px 36px;">戻る</button>
   </div>
   <div id="dressScreen" class="hidden">
-    <h3>きがえ</h3>
-    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;margin-bottom:6px;max-width:760px;">
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;width:100%;max-width:760px;margin-bottom:6px;">
+      <h3 style="margin:0;">きがえ</h3>
       <span id="coinLabel" style="font-weight:700;color:#b07818;">🪙 コイン 0</span>
       <span id="lifeEatenLabel" style="font-weight:700;color:#7a5a33;">累計 0 体</span>
       <button class="btn" id="gachaOpenBtn" style="background:#7a4fd0;border-bottom-color:#4e2d8f;font-size:14px;padding:9px 20px;">🎰 ガチャ画面</button>
     </div>
-    <p style="font-size:12px;color:#7a5a33;line-height:1.55;max-width:640px;margin-bottom:8px;">コインはゲームオーバー時に「食べた数 ＋ スコア500点ごとに1」でもらえるよ。ガチャは「ガチャ画面」ボタンから回せるよ（スコア報酬のものはガチャからは出ません）。</p>
     <div id="dressMain">
       <div id="dressPreviewBox">
-        <canvas id="dressCanvas" width="300" height="300"></canvas>
+        <div id="dressCanvasWrap"><canvas id="dressCanvas" width="300" height="300"></canvas></div>
         <button class="btn" id="dressRandom" style="background:#8a5a2b;border-bottom-color:#5b3a17;font-size:14px;padding:9px 22px;">🎲 おまかせ</button>
       </div>
       <div id="dressSide">
@@ -241,7 +241,7 @@
         <div id="dressGrid"></div>
       </div>
     </div>
-    <button class="btn" id="dressClose" style="margin-top:14px;font-size:17px;padding:13px 38px;">決定</button>
+    <button class="btn" id="dressClose" style="margin-top:8px;font-size:16px;padding:10px 34px;">決定</button>
   </div>
   <div id="gachaScreen" class="hidden">
     <div class="gacha-top">
@@ -283,7 +283,7 @@
       <div class="gacha-right">
         <div class="gacha-panel-y">
           <button class="gacha-pull" id="gachaPull">ガチャを回す</button>
-          <p class="gacha-cost">1回 🪙 30コイン ／ スコア報酬のものは出ません</p>
+          <p class="gacha-cost">1回 🪙 30コイン ／ スコア報酬のものは出ません<br>コインはゲームオーバー時に「食べた数 ＋ スコア500点ごとに1」もらえるよ</p>
           <p class="gacha-result" id="gachaResultText"></p>
           <div class="gacha-won hidden" id="gachaWon"></div>
         </div>
@@ -613,7 +613,7 @@ function pop(freq) {
     if (!(e.target.closest && e.target.closest("#dressGrid"))) e.preventDefault();
   }, { passive: false });
   document.getElementById("gachaScreen").addEventListener("touchmove", function(e) {
-    if (!(e.target.closest && e.target.closest("#gachaList"))) e.preventDefault();
+    if (!(e.target.closest && e.target.closest("#gachaList, .gacha-panel-y"))) e.preventDefault();
   }, { passive: false });
   document.getElementById("zukanBtn").addEventListener("click", function() { zukanEl.classList.remove("hidden"); zukanTab("main"); });
   document.getElementById("zukanClose").addEventListener("click", function() { zukanEl.classList.add("hidden"); });
