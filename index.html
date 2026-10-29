@@ -1413,7 +1413,7 @@ function drawCostumeImgFront(g, x, y, r, crownOn) {
   if (hat !== "none") {
     const im = costumeImgs[hat];
     if (im && im.complete && im.naturalWidth) {
-      const hd = HAT_DRAW[hat] || [1.78, 0.30]; // worn deep and wide so it hugs the head
+      const hd = HAT_DRAW[hat] || [1.62, 0.08]; // width matched to the head, brim pulled down to the eyebrows
       const w = r * hd[0], h = w * im.naturalHeight / im.naturalWidth;
       g.drawImage(im, x - w / 2, y - r * hd[1] - h, w, h);
     }
@@ -1425,7 +1425,7 @@ function drawCostumeFront(x, y, r, crownOn) { drawCostumeImgFront(ctx, x, y, r, 
 // Tomoguri's own face; the others are drawn over the blank-face base variant.
 const GLASS_FACE = { megane: 1, sunglasses: 1, cyberface: 1, domino: 1, hige: 1, monocle: 1 };
 const FACE_DRAW = { megane: [1.25, 0.02], sunglasses: [1.22, 0.02], cyberface: [1.30, 0.03], domino: [1.15, 0.03], hige: [0.95, 0.27], monocle: [1.30, 0.14], manmarume: [1.28, 0.10], okori: [1.30, 0.11], ikemen: [1.32, 0.10], meromero: [1.32, 0.12], kabuki: [1.34, 0.10], kamisama: [1.30, 0.10] };
-// per-hat draw overrides: [width factor, bottom height] (default is [1.78, 0.30])
+// per-hat draw overrides: [width factor, bottom height] (default is [1.62, 0.08])
 const HAT_DRAW = { futaba: [0.95, 0.40] };
 // ---- integrated player bases: instead of pasting costumes over the original
 // sprite, the base itself is rewritten per worn part (hat -> the original
