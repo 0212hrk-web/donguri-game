@@ -1145,6 +1145,7 @@ const REFLEX_TOTAL = 15;
 function startReflexEvent() {
   enemies.forEach(function(e) { burst(e.x, e.y, 5, 28); });
   enemies = []; orbs = []; gold = null; chashu = null;
+  zoom = 1; shake = 0; // the reflex scene is drawn in screen coordinates: reset the camera
   document.getElementById("specialBtn").style.display = "none";
   reflex = { cleared: 0, targets: [], parts: [], spawnT: 0.3, flashRed: 0 };
   state = "reflex";
@@ -1154,6 +1155,7 @@ function startReflexEvent() {
 function clearReflexEvent() {
   reflex = null;
   state = "playing";
+  zoom = Math.max(0.22, Math.min(1, Math.pow(START_R / player.r, 0.55))); // restore the growth camera
   invincible = Math.max(invincible, 1.5);
   reflexTimer = 30 + Math.random() * 15;
   document.getElementById("specialBtn").style.display = "";
