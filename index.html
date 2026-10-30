@@ -308,12 +308,12 @@
         </div>
         <div class="gacha-panel-b">
           <button class="gacha-list-btn" id="gachaListBtn">何が出るか見る</button>
-          <p class="gacha-cost" style="color:#eaf4ff;">排出対象は全27種。大きな画面で見られるよ</p>
+          <p class="gacha-cost" style="color:#eaf4ff;">排出対象は全25種。大きな画面で見られるよ</p>
         </div>
       </div>
     </div>
     <div class="gacha-list hidden" id="gachaList">
-      <div class="gacha-list-head"><b>ガチャで出るもの（全27種）</b><button class="btn" id="gachaListClose" style="background:#fff;color:#24507e;border-bottom-color:#9cc3ea;font-size:13px;padding:7px 16px;">とじる</button></div>
+      <div class="gacha-list-head"><b>ガチャで出るもの（全25種）</b><button class="btn" id="gachaListClose" style="background:#fff;color:#24507e;border-bottom-color:#9cc3ea;font-size:13px;padding:7px 16px;">とじる</button></div>
       <div class="gacha-list-grid" id="gachaListGrid"></div>
     </div>
   </div>
@@ -698,8 +698,8 @@ const PART_DEFS = [
   { id: "wings", name: "はね" }, { id: "antenna", name: "しょっかく" }
 ];
 const COSTUME_ITEMS = [
-  { id: "futaba", part: "hat", name: "ふたば", via: { t: "gacha" } },
-  { id: "megane", part: "face", name: "メガネ", via: { t: "gacha" } },
+  { id: "futaba", part: "hat", name: "ふたば", via: { t: "score", n: 5000 } },
+  { id: "megane", part: "face", name: "メガネ", via: { t: "score", n: 5000 } },
   { id: "akuma", part: "wings", name: "あくま", via: { t: "gacha" } },
   { id: "heart", part: "antenna", name: "ハート", via: { t: "gacha" } },
   { id: "nekomimi", part: "hat", name: "ねこみみ", via: { t: "gacha" } },
