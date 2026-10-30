@@ -24,7 +24,7 @@
   #growthBar { height: 100%; width: 0%; background: linear-gradient(90deg,#ffb347,#ff7b39); transition: width .25s; }
   .overlay {
     position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-    background: rgba(255,251,238,.82); text-align: center; padding: 18px 24px; z-index: 5; overflow-y: auto;
+    background: rgba(255,251,238,.82); text-align: center; padding: 18px 24px; z-index: 5; overflow-y: auto; touch-action: pan-y; overscroll-behavior: contain;
   }
   .overlay > :first-child { margin-top: auto; }
   .overlay > :last-child { margin-bottom: auto; }
@@ -60,7 +60,7 @@
   #volPanel {
     position: absolute; inset: 0; z-index: 15; background: rgba(255,251,238,.98); color: #5b3a17;
     display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-    padding: 22px 24px; overflow-y: auto;
+    padding: 22px 24px; overflow-y: auto; touch-action: pan-y; overscroll-behavior: contain;
   }
   #volPanel > :first-child { margin-top: auto; }
   #volPanel > :last-child { margin-bottom: auto; }
@@ -82,10 +82,10 @@
   .volRow input[type="range"]::-moz-range-track { height: 12px; border-radius: 999px; background: #ecd9b8; }
   .volRow input[type="range"]::-moz-range-thumb { width: 32px; height: 32px; border-radius: 50%; background: #ff7b39; border: 3px solid #fff; box-shadow: 0 2px 7px rgba(90,50,10,.4); }
   #volPanel .note { font-size: 13px; color: #7a5a33; line-height: 1.6; max-width: 430px; width: 100%; }
-  #zukan { position: absolute; inset: 0; z-index: 20; background: #fff7e8; padding: 16px; overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; align-items: center; }
+  #zukan { position: absolute; inset: 0; z-index: 20; background: #fff7e8; padding: 16px; overflow-y: auto; -webkit-overflow-scrolling: touch; touch-action: pan-y; overscroll-behavior: contain; display: flex; flex-direction: column; align-items: center; }
   #zukan.hidden { display: none; }
   #zukan h3 { font-size: 22px; margin: 4px 0 10px; color: #5b3a17; }
-  #dressScreen { position: absolute; inset: 0; z-index: 15; background: #fff7e8; padding: 14px; overflow: hidden; display: flex; flex-direction: column; align-items: center; }
+  #dressScreen { position: absolute; inset: 0; z-index: 15; background: #fff7e8; padding: 14px; overflow-y: auto; overflow-x: hidden; touch-action: pan-y; overscroll-behavior: contain; display: flex; flex-direction: column; align-items: center; }
   #dressScreen.hidden { display: none; }
   #dressScreen h3 { font-size: 22px; margin: 4px 0 10px; color: #5b3a17; }
   #dressMain { display: flex; gap: 14px; flex-wrap: nowrap; justify-content: center; align-items: stretch; width: 100%; max-width: 780px; flex: 1; min-height: 0; }
@@ -96,10 +96,10 @@
   #dressTabs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
   .dtab { padding: 10px 16px; border-radius: 999px; border: 2px solid #8a5a2b; background: #fff; color: #5b3a17; font-weight: 700; font-size: 14px; cursor: pointer; font-family: inherit; }
   .dtab.on { background: #ffb347; }
-  #dressGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin-top: 10px; overflow-y: auto; flex: 1; min-height: 0; padding: 2px; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+  #dressGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin-top: 10px; overflow-y: auto; flex: 1; min-height: 0; padding: 2px; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; transform: translateZ(0); }
   body.titleMode #hud, body.titleMode #specialBtn, body.titleMode #flashText, body.titleMode #pausedTag { display: none !important; }
   #startScreen { background: #fffbee; }
-  #missionScreen { position: absolute; inset: 0; z-index: 15; background: #fff7e8; padding: 14px; overflow: hidden; display: flex; flex-direction: column; align-items: center; }
+  #missionScreen { position: absolute; inset: 0; z-index: 15; background: #fff7e8; padding: 14px; overflow-y: auto; overflow-x: hidden; touch-action: pan-y; overscroll-behavior: contain; display: flex; flex-direction: column; align-items: center; }
   #missionScreen.hidden { display: none; }
   #missionScreen h3 { font-size: 22px; color: #5b3a17; }
   #missionList { flex: 1; min-height: 0; overflow-y: auto; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; width: 100%; max-width: 640px; display: flex; flex-direction: column; gap: 8px; padding: 2px; transform: translateZ(0); }
@@ -114,7 +114,7 @@
   .mdone { color: #12b76a; font-weight: 900; font-size: 13px; flex: none; }
   .msec { font-weight: 900; color: #5b3a17; margin: 8px 0 0; text-align: left; width: 100%; }
   #dressGrid { transform: translateZ(0); }
-  #gachaScreen { position: absolute; inset: 0; z-index: 16; background: linear-gradient(180deg, #ffedd9, #ffd9ba); padding: 12px; display: flex; flex-direction: column; overflow: hidden; }
+  #gachaScreen { position: absolute; inset: 0; z-index: 16; background: linear-gradient(180deg, #ffedd9, #ffd9ba); padding: 12px; display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; touch-action: pan-y; overscroll-behavior: contain; }
   #gachaScreen.hidden { display: none; }
   .gacha-top { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 900px; margin: 0 auto; }
   .gacha-coins { background: #fff; border: 3px solid #e8b34b; border-radius: 999px; padding: 7px 16px; font-weight: 900; color: #8a5a10; font-size: 16px; box-shadow: 0 2px 0 rgba(160,100,20,.25); }
@@ -125,7 +125,7 @@
   @keyframes gachaShake { 0%,100% { transform: rotate(0deg); } 20% { transform: rotate(-2.4deg); } 45% { transform: rotate(2.2deg); } 70% { transform: rotate(-1.2deg); } }
   .gacha-logo { font-weight: 900; font-size: clamp(19px, 4vw, 30px); line-height: 1.18; color: #6b4423; text-shadow: 2px 2px 0 #fff, -2px 2px 0 #fff, 2px -2px 0 #fff, -2px -2px 0 #fff, 0 4px 0 #fff; margin-top: 2px; text-align: center; }
   .gacha-right { flex: 1; display: flex; flex-direction: column; gap: 12px; min-width: 0; min-height: 0; overflow: hidden; }
-  .gacha-panel-y { background: #ffd94d; border-radius: 20px; padding: 14px; box-shadow: 0 4px 0 rgba(170,120,20,.35); flex-shrink: 1; min-height: 0; overflow-y: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
+  .gacha-panel-y { background: #ffd94d; border-radius: 20px; padding: 14px; box-shadow: 0 4px 0 rgba(170,120,20,.35); flex-shrink: 1; min-height: 0; overflow-y: auto; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; transform: translateZ(0); }
   .gacha-panel-b { background: #57a8e8; border-radius: 20px; padding: 14px; box-shadow: 0 4px 0 rgba(30,90,160,.35); flex: 1; min-height: 0; flex-shrink: 0; display: flex; flex-direction: column; }
   .gacha-pull { width: 100%; background: #fff6e6; color: #5b3a17; font-size: clamp(20px, 3.6vw, 27px); font-weight: 900; border: 3px solid #e8b34b; border-bottom: 6px solid #d9a441; border-radius: 16px; padding: 14px 8px; cursor: pointer; font-family: inherit; }
   .gacha-pull:active { transform: translateY(2px); }
@@ -136,7 +136,7 @@
   .gacha-won img { height: 58px; max-width: 100%; object-fit: contain; }
   .gacha-won b { color: #5b3a17; font-size: 16px; text-align: center; }
   .gacha-list-btn { width: 100%; background: #fff6e6; color: #24507e; font-size: clamp(16px, 3vw, 21px); font-weight: 900; border: 3px solid #bcd9f5; border-bottom: 6px solid #9cc3ea; border-radius: 16px; padding: 12px 8px; cursor: pointer; font-family: inherit; }
-  .gacha-list { position: absolute; inset: 10px; z-index: 5; background: #eaf4ff; border: 3px solid #57a8e8; border-radius: 18px; padding: 12px; overflow-y: auto; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; box-shadow: 0 10px 30px rgba(30,80,140,.35); }
+  .gacha-list { position: absolute; inset: 10px; z-index: 5; background: #eaf4ff; border: 3px solid #57a8e8; border-radius: 18px; padding: 12px; overflow-y: auto; touch-action: pan-y; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; transform: translateZ(0); box-shadow: 0 10px 30px rgba(30,80,140,.35); }
   .gacha-list.hidden { display: none; }
   .gacha-list-head { display: flex; justify-content: space-between; align-items: center; position: sticky; top: -12px; background: #eaf4ff; padding: 8px 2px 10px; z-index: 1; }
   .gacha-list-head b { color: #24507e; font-size: 18px; }
@@ -647,17 +647,23 @@ function pop(freq) {
     document.getElementById("gachaList").classList.add("hidden");
   });
   document.getElementById("dressScreen").addEventListener("touchmove", function(e) {
-    if (!(e.target.closest && e.target.closest("#dressGrid"))) e.preventDefault();
+    if (e.target.closest && e.target.closest("#dressGrid")) return;
+    if (this.scrollHeight > this.clientHeight) return;
+    e.preventDefault();
   }, { passive: false });
   document.getElementById("dressGrid").addEventListener("touchstart", function() { dressScrollMark = this.scrollTop; }, { passive: true });
   document.getElementById("missionBtn").addEventListener("click", openMissions);
   document.getElementById("missionBtn2").addEventListener("click", openMissions);
   document.getElementById("missionClose").addEventListener("click", closeMissions);
   document.getElementById("missionScreen").addEventListener("touchmove", function(e) {
-    if (!(e.target.closest && e.target.closest("#missionList"))) e.preventDefault();
+    if (e.target.closest && e.target.closest("#missionList")) return;
+    if (this.scrollHeight > this.clientHeight) return;
+    e.preventDefault();
   }, { passive: false });
   document.getElementById("gachaScreen").addEventListener("touchmove", function(e) {
-    if (!(e.target.closest && e.target.closest("#gachaList, .gacha-panel-y"))) e.preventDefault();
+    if (e.target.closest && e.target.closest("#gachaList, .gacha-panel-y")) return;
+    if (this.scrollHeight > this.clientHeight) return;
+    e.preventDefault();
   }, { passive: false });
   document.getElementById("zukanBtn").addEventListener("click", function() { zukanEl.classList.remove("hidden"); zukanTab("main"); });
   document.getElementById("zukanClose").addEventListener("click", function() { zukanEl.classList.add("hidden"); });
@@ -844,7 +850,11 @@ function checkCostumeUnlocks() {
 let dressPart = "hat", dressOpen = false, dressScrollMark = 0;
 function openDress() {
   dressOpen = true;
-  document.getElementById("dressScreen").classList.remove("hidden");
+  const ds = document.getElementById("dressScreen");
+  ds.classList.remove("hidden");
+  ds.scrollTop = 0;
+  const dg = document.getElementById("dressGrid"); if (dg) dg.scrollTop = 0;
+  dressScrollMark = 0;
   renderDressStats(); renderDressTabs(); renderDressGrid(); renderDressPreview();
 }
 function renderDressStats() {
@@ -1008,7 +1018,7 @@ function renderDressTabs() {
     const b = document.createElement("button");
     b.textContent = pd.name;
     b.className = "dtab" + (dressPart === pd.id ? " on" : "");
-    b.addEventListener("click", function() { dressPart = pd.id; renderDressTabs(); renderDressGrid(); pop(660); });
+    b.addEventListener("click", function() { dressPart = pd.id; const dg = document.getElementById("dressGrid"); if (dg) dg.scrollTop = 0; dressScrollMark = 0; renderDressTabs(); renderDressGrid(); pop(660); });
     box.appendChild(b);
   });
 }
