@@ -66,6 +66,8 @@
   #volPanel > :last-child { margin-bottom: auto; }
   #volPanel.hidden { display: none; }
   #volPanel h3 { font-size: 22px; margin-bottom: 8px; }
+  .menuGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; max-width: 430px; margin-top: 14px; }
+  .menuGrid .btn { width: 100%; font-size: 15px; padding: 13px 4px; }
   .volRow { display: flex; align-items: center; gap: 10px; margin: 16px 0; font-weight: 700; font-size: 17px; width: 100%; max-width: 430px; }
   .volRow label { width: 62px; flex: none; }
   .volRow span { width: 54px; text-align: right; flex: none; font-size: 17px; }
@@ -209,11 +211,13 @@
     <div class="volRow"><label>効果音</label><input type="range" id="seVol" min="0" max="100" value="80"><span id="seVolVal">80%</span></div>
     <div class="volRow"><label>ガイド</label><input type="checkbox" id="guideToggle" checked style="width:32px;height:32px;accent-color:#12b76a;flex:none;"><span id="guideState">ON</span></div>
     <p class="note">ガイド：敵の周りの点線（緑＝食べられる／赤＝キケン）の表示</p>
-    <button class="btn" id="dressBtn" style="margin-top:14px;background:#ff8fb2;border-bottom-color:#d14e7e;font-size:16px;padding:12px 34px;">きがえ画面を開く</button>
     <p class="note">コスチュームはスコア報酬・累計食べた数・ミッション・ガチャで解放（図鑑に一覧あり）</p>
-    <button class="btn" id="zukanBtn" style="margin-top:14px;background:#12b76a;border-bottom-color:#0a7a45;font-size:16px;padding:12px 34px;">図鑑を見る</button>
-    <button class="btn" id="missionBtn2" style="margin-top:12px;background:#f59e0b;border-bottom-color:#b45309;font-size:16px;padding:12px 34px;">🎯 ミッションを見る</button>
-    <button class="btn" id="rotExitBtn" style="display:none;margin-top:12px;font-size:15px;padding:11px 30px;">画面の回転を戻す</button>
+    <div class="menuGrid">
+      <button class="btn" id="dressBtn" style="background:#ff8fb2;border-bottom-color:#d14e7e;">きがえ画面を開く</button>
+      <button class="btn" id="zukanBtn" style="background:#12b76a;border-bottom-color:#0a7a45;">図鑑を見る</button>
+      <button class="btn" id="missionBtn2" style="background:#f59e0b;border-bottom-color:#b45309;">🎯 ミッションを見る</button>
+      <button class="btn" id="titleBtnMenu" style="background:#8b5cf6;border-bottom-color:#6d28d9;">タイトルに戻る</button>
+    </div>
     <button class="btn" id="volClose" style="margin-top:12px;font-size:17px;padding:13px 38px;">閉じる</button>
   </div>
   <div id="zukan" class="hidden">
@@ -417,8 +421,6 @@ function resize() {
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   const rs = document.getElementById("rotateScreen");
   if (rs) rs.classList.toggle("hidden", !(baseH > baseW && !forcedRotate));
-  const ex = document.getElementById("rotExitBtn");
-  if (ex) ex.style.display = forcedRotate ? "" : "none";
 }
 function setForcedRotate(deg) { forcedRotate = deg; if (!deg) applyWrapRotation(); resize(); }
 function isPortraitBlocked() { return baseH > baseW && !forcedRotate; }
@@ -1904,7 +1906,6 @@ function useSpecial() {
 document.getElementById("specialBtn").addEventListener("click", useSpecial);
 document.getElementById("rotBtnR").addEventListener("click", function() { setForcedRotate(90); });
 document.getElementById("rotBtnL").addEventListener("click", function() { setForcedRotate(-90); });
-document.getElementById("rotExitBtn").addEventListener("click", function() { setForcedRotate(0); });
 window.addEventListener("keydown", function(e) {
   if (e.code === "Space") { e.preventDefault(); useSpecial(); }
 });
@@ -2141,6 +2142,29 @@ function startGame() {
 }
 document.getElementById("startBtn").addEventListener("click", startGame);
 document.getElementById("retryBtn").addEventListener("click", startGame);
+document.getElementById("titleBtnMenu").addEventListener("click", function() {
+  // quit the current run from the settings menu: bank progress like a game over, then back to title
+  if (state === "playing" || state === "reflex") {
+    if (score > best) { best = score; try { localStorage.setItem("donguri_best", String(best)); } catch (e) {} }
+    bestRunEaten = Math.max(bestRunEaten, eaten || 0);
+    if (player) lifeMaxRatio = Math.max(lifeMaxRatio, player.r / START_R);
+    coins += (eaten || 0) + Math.floor((score || 0) / 500);
+    saveStats();
+  }
+  reflex = null; meteorEvent = null;
+  if (forcedRotate) setForcedRotate(0);
+  document.getElementById("volPanel").classList.add("hidden");
+  menuOpen = false;
+  document.getElementById("pausedTag").style.display = "none";
+  document.getElementById("overScreen").classList.add("hidden");
+  state = "start";
+  bgmFast = false; setBgmRate(1);
+  if (bgm) { bgm.pause(); try { bgm.currentTime = 0; } catch (e) {} }
+  document.getElementById("specialBtn").style.display = "none";
+  document.getElementById("startScreen").classList.remove("hidden");
+  setTitleMode(true);
+  kickLoop();
+});
 document.getElementById("titleBtn").addEventListener("click", function() {
   document.getElementById("overScreen").classList.add("hidden");
   state = "start";
