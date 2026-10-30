@@ -1006,7 +1006,6 @@ function renderZukanCostumes() {
     const card = document.createElement("div");
     card.className = "zcard";
     let prog = "";
-    if (!un && it.via.t === "score") prog = "（あと " + Math.max(0, it.via.n - Math.max(best, score || 0)) + " 点）";
     if (!un && it.via.t === "eaten") prog = "（今 " + lifeEaten + " 体）";
     card.innerHTML = "<img src=\"" + COSTUME_SRC[it.id] + "\" alt=\"" + it.name + "\"><h4>" + (it.rare ? "✨レア " : "") + it.name + "</h4><p>" + partName(it.part) + "。" +
       (un ? "解放済み！きがえ画面で着せられる。" : unlockText(it) + prog + "。") + "</p>";
