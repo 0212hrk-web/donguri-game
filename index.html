@@ -1961,8 +1961,13 @@ function updateReflex(dt) {
     return;
   }
   if (r.goT > 0) r.goT -= dt;
-  r.spawnT -= dt;
-  if (r.spawnT <= 0 && r.targets.length < 3) { spawnReflexTarget(); r.spawnT = 0.45; }
+  // one acorn at a time: a new one appears only after the current one is completely gone
+  if (r.targets.length === 0) {
+    r.spawnT -= dt;
+    if (r.spawnT <= 0) { spawnReflexTarget(); r.spawnT = 0.3; }
+  } else {
+    r.spawnT = 0.3;
+  }
   for (let i = r.targets.length - 1; i >= 0; i--) {
     const tg = r.targets[i]; tg.age += dt;
     if (tg.age >= tg.life) {
